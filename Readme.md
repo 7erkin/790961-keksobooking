@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [7erkin](https://up.htmlacademy.ru/javascript/14/user/790961).
-* Наставник: `Неизвестно`.
+* Наставник: `Константин Цуканов`.
 
 ---
 
