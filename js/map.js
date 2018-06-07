@@ -104,12 +104,12 @@ var task1Function = function (adsQuantity) {
   return ads;
 };
 
-// // task-2
+// task-2
 var task2Function = function () {
   document.querySelector('.map').classList.remove('map--faded');
 };
 
-// // task-3
+// task-3
 var getIconsGeometry = function (iconDomElement) {
   var iconGeometry = {
     x: iconDomElement.width,
