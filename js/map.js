@@ -50,6 +50,21 @@ var FEATURES = [
   'elevator',
   'conditioner'
 ];
+var PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+];
+
+var shuffle = function (array) {
+  for (var i = array.length - 1; i > 0; --i) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[j];
+    array[j] = array[i];
+    array[i] = temp;
+  }
+  return array;
+};
 
 var getRandomValue = function (minValue, maxValue) {
   var randomValue = maxValue - (maxValue - 1 - minValue) * Math.random();
@@ -87,11 +102,7 @@ var Ad = function (index) {
   offer.checkout = getRandomArrayElement(CHECKPOINT);
   offer.features = getFeatures();
   offer.description = ' ';
-  offer.photos = [
-    'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-    'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-    'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-  ];
+  offer.photos = shuffle(PHOTOS);
   this.location = {};
   this.location.x = getRandomValue(MIN_X_LOCATION, MAX_X_LOCATION);
   this.location.y = getRandomValue(MIN_Y_LOCATION, MAX_Y_LOCATION);
