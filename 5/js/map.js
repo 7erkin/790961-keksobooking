@@ -53,7 +53,7 @@ var getIconGeometry = function () {
   };
 };
 var iconGeometry = getIconGeometry();
-var isFormAvailable = false;
+var formAvailable = false;
 var shuffle = function (array) {
   for (var i = array.length - 1; i > 0; --i) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -110,7 +110,8 @@ var createAds = function (adsQuantity) {
   return ads;
 };
 var renderBlockMap = function () {
-  document.querySelector('.map').classList.remove('map--faded');
+  var element = document.querySelector('.map');
+  removeClassFromElement(element, 'map--faded');
 };
 var createPointElements = function (ads) {
   var template = document.querySelector('template').content.querySelector('.map__pin');
@@ -167,9 +168,8 @@ var renderAd = function (ad) {
   var container = document.querySelector('.map');
   var nextSiblingElement = container.querySelector('.map__filters-container');
   container.insertBefore(card, nextSiblingElement);
-  var elementCloseCard = card.querySelector('.popup__close');
-  elementCloseCard.addEventListener('click', onCloseAdClicked);
-  document.addEventListener('keydown', onCloseAdClicked);
+  addListenerTo('.popup__close', 'click', onCloseAdClicked);
+  addListenerToDocument('keydown', onCloseAdClicked);
 };
 
 // ========== module4-task1 ==========
@@ -216,24 +216,20 @@ var setInitialPageCondition = function () {
   setHandlerOnMainpin();
 };
 var setHandlerOnMainpin = function () {
-  var elementMainpin = document.querySelector('.map__pin--main');
-  elementMainpin.addEventListener('mouseup', onMainpinMouseup);
+  addListenerTo('.map__pin--main', 'mouseup', onMainpinMouseup);
 };
 var setHandlerOnPoints = function () {
-  var elementMappins = document.querySelector('.map__pins');
-  elementMappins.addEventListener('click', onPointClicked);
+  addListenerTo('.map__pins', 'click', onPointClicked);
 };
 var deleteHandlerOnMainpin = function () {
-  var elementMainpin = document.querySelector('.map__pin--main');
-  elementMainpin.removeEventListener('mouseup', onMainpinMouseup);
+  removeListenerFrom('.map__pin--main', 'mouseup', onMainpinMouseup);
 };
 var deleteHandlerOnMappins = function () {
-  var elementMappins = document.querySelector('.map__pins');
-  elementMappins.removeEventListener('click', onPointClicked);
+  removeListenerFrom('.map__pins', 'click', onPointClicked);
 };
 var renderAdForm = function () {
   var elementForm = document.querySelector('.ad-form');
-  elementForm.classList.remove('ad-form--disabled');
+  removeClassFromElement(elementForm, 'ad-form--disabled');
 };
 var setMainPageActive = function () {
   deleteHandlerOnMainpin();
@@ -243,10 +239,10 @@ var setMainPageActive = function () {
   setFormAvailable();
   renderPointsBlock(points);
   setInitialAddressField();
-  isFormAvailable = true;
+  formAvailable = true;
 };
 var onMainpinMouseup = function () {
-  if (isFormAvailable) {
+  if (formAvailable) {
     return;
   }
   setMainPageActive();
@@ -262,14 +258,14 @@ var onPointClicked = function (evt) {
 var openAd = function (element) {
   var index = getNumberAd(element);
   renderAd(ads[index]);
-  document.addEventListener('keydown', onCloseAdClicked);
+  addListenerToDocument('keydown', onCloseAdClicked);
 };
 var closeAd = function () {
   var container = document.querySelector('.map');
   var card = container.querySelector('.map__card');
   if (card !== null) {
     container.removeChild(card);
-    document.removeEventListener('keydown', onCloseAdClicked);
+    removeListenerFromDocument('keydown', onCloseAdClicked);
   }
 };
 var onCloseAdClicked = function (evt) {
@@ -311,7 +307,7 @@ var hideAdForm = function () {
   elementForm.classList.add('ad-form--disabled');
 };
 var hideBlockMap = function () {
-  document.querySelector('.map').classList.add('map--faded');
+  addClassToElement(document.querySelector('.map'), 'map--faded');
 };
 var deletePointsBlock = function () {
   var container = document.querySelector('.map__pins');
@@ -379,11 +375,11 @@ var setMainPageNotActive = function () {
   hideBlockMap();
   deletePointsBlock();
   setFormDisabled();
-  isFormAvailable = false;
+  formAvailable = false;
 };
 var onResetClicked = function (evt) {
-  evt.preventDefault();
   setMainPageNotActive();
+  evt.stopPropagation();
 };
 
 var setNotice = function (checkResult) {
@@ -428,6 +424,9 @@ var checkValidity = function (elements) {
     if (elements[i].validity.valid) {
       continue;
     }
+    if (elements[i].validity.customError) {
+      continue;
+    }
     checkResult.push({
       field: elements[i],
       notice: getNotice(elements[i])
@@ -450,25 +449,56 @@ var onSendFormClicked = function (evt) {
   }
 };
 var showSuccessSendInfo = function () {
-  document.querySelector('.success').classList.remove('hidden');
-  document.addEventListener('click', onCloseSuccessSendInfo);
+  var element = document.querySelector('.success');
+  removeClassFromElement(element, 'hidden');
+  addListenerToDocument('click', onCloseSuccessSendInfo);
+  addListenerToDocument('keydown', onCloseSuccessSendInfo);
+};
+var genEventResetForm = function () {
+  var event = new Event('reset', {bubbles: true});
+  var elementForm = document.querySelector('.ad-form');
+  elementForm.dispatchEvent(event);
 };
 var onCloseSuccessSendInfo = function (evt) {
+  var element = document.querySelector('.success');
   if (!(evt.keyCode === 27 || evt.keyCode === undefined)) {
     return;
   }
-  document.querySelector('.success').classList.add('hidden');
-  document.removeEventListener('click', onCloseSuccessSendInfo);
+  genEventResetForm();
+  addClassToElement(element, 'hidden');
+  removeListenerFromDocument('click', onCloseSuccessSendInfo);
 };
 
-document.querySelector('#type').addEventListener('change', onTypeAppartmentChanged);
-document.querySelector('#timein').addEventListener('change', onTimeinChanged);
-document.querySelector('#timeout').addEventListener('change', onTimeoutChanged);
-document.querySelector('#room_number').addEventListener('change', onRoomNumberChanged);
-document.querySelector('.ad-form__reset').addEventListener('click', onResetClicked);
-document.querySelector('.ad-form__submit').addEventListener('click', onSendFormClicked);
+//
+var addListenerTo = function (cssSelector, eventName, eventListener) {
+  document.querySelector(cssSelector).addEventListener(eventName, eventListener);
+};
+var removeListenerFrom = function (cssSelector, eventName, eventListener) {
+  document.querySelector(cssSelector).removeEventListener(eventName, eventListener);
+};
+var addListenerToDocument = function (eventName, eventListener) {
+  document.addEventListener(eventName, eventListener);
+};
+var removeListenerFromDocument = function (eventName, eventListener) {
+  document.removeEventListener(eventName, eventListener);
+};
+var addClassToElement = function (element, className) {
+  element.classList.add(className);
+};
+var removeClassFromElement = function (element, className) {
+  element.classList.remove(className);
+};
+var addListenersToAdForm = function () {
+  addListenerTo('#type', 'change', onTypeAppartmentChanged);
+  addListenerTo('#timein', 'change', onTimeinChanged);
+  addListenerTo('#timeout', 'change', onTimeoutChanged);
+  addListenerTo('#room_number', 'change', onRoomNumberChanged);
+  addListenerTo('.ad-form', 'reset', onResetClicked);
+  addListenerTo('.ad-form__submit', 'click', onSendFormClicked);
+};
 
 // использование
 var ads = createAds(ADS_QUANTITY);
 var points = createPointElements(ads);
+addListenersToAdForm();
 setInitialPageCondition();
