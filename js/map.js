@@ -166,9 +166,8 @@
     var points = [];
     for (var i = 0; i < ads.length; ++i) {
       points[i] = template.cloneNode(true);
-      var xCoorLocation = ads[i].location.x - parseInt(iconGeometry.width, 10) / 2;
-      var yCoorLocation = ads[i].location.y - parseInt(iconGeometry.height, 10);
-      points[i].style = 'left: ' + xCoorLocation + 'px; top: ' + yCoorLocation + 'px';
+      var pointLocation = getPointLocation(ads[i]);
+      points[i].style = 'left: ' + pointLocation.x + 'px; top: ' + pointLocation.y + 'px';
       points[i].querySelector('img').src = ads[i].author.avatar;
       points[i].querySelector('img').alt = ads[i].author.title;
       points[i].setAttribute('data-ad-id', i);
@@ -176,6 +175,12 @@
       points[i].querySelector('img').setAttribute('data-ad-id', i); // !!!
     }
     return points;
+  };
+  var getPointLocation = function (ad) {
+    return {
+      x: ad.location.x - parseInt(iconGeometry.width, 10) / 2,
+      y: ad.location.y - parseInt(iconGeometry.height, 10)
+    };
   };
   var deletePointsBlock = function () {
     var container = document.querySelector('.map__pins');
