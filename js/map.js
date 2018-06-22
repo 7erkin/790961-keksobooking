@@ -2,12 +2,12 @@
 
 (function () {
   var formAvailable = false;
-  /**
-   * @description по атрибуту узла, определяет индекс объявления из массива объявлений
-   * @param {HTMLElement} element элемент ДОМа
-   * @returns индекс объявления в массиве
-   */
 
+  /**
+   * По атрибуту узла, определяет индекс объявления из массива объявлений
+   * @param {HTMLElement} element элемент ДОМа
+   * @return {number} индекс объявления в массиве
+   */
   var getNumberAd = function (element) {
     return element.dataset.adId;
   };
@@ -75,16 +75,17 @@
       window.library.removeListenerFromDocument('keydown', onCloseAdClicked);
     }
   };
+
   /**
- * @description устанавливаем обработчик на своё событие с именем resetPageCondition
- */
+   * Устанавливаем обработчик на своё событие с именем resetPageCondition
+   */
   var setCustomHandlerResetOnDocument = function () {
     window.library.addListenerToDocument('resetPageCondition', onResetPageConditionGenerated);
   };
   var setHandlerOnMainpin = function () {
     window.library.addListenerTo('.map__pin--main', 'mouseup', onMainpinMouseup);
   };
-  var setHandlerOnPoints = function () {
+  var setHandlerOnMappins = function () {
     window.library.addListenerTo('.map__pins', 'click', onPointClicked);
   };
   var deleteHandlerOnMainpin = function () {
@@ -101,6 +102,9 @@
     setMainPageActive();
   };
   var onPointClicked = function (evt) {
+    if (evt.target.dataset.adId === undefined) {
+      return;
+    }
     if (!(evt.keyCode === 13 || evt.keyCode === undefined)) {
       return;
     }
@@ -133,7 +137,7 @@
   };
   var setMainPageActive = function () {
     deleteHandlerOnMainpin();
-    setHandlerOnPoints();
+    setHandlerOnMappins();
     renderMap();
     renderAdForm();
     window.adForm.setFormAvailable();
@@ -150,10 +154,18 @@
     hideMap();
     deletePointsBlock();
     window.adForm.setFormDisabled();
+    resetNotices();
     formAvailable = false;
   };
+  var resetNotices = function () {
+    var elementInputTitle = document.querySelector('#title');
+    var elementInputPrice = document.querySelector('#price');
+    window.notice.deleteNotice(elementInputTitle);
+    window.notice.deleteNotice(elementInputPrice);
+  };
+
   /**
-   * @description устанавливаем начальное значение страницы при загрузке
+   * Устанавливаем начальное значение страницы при загрузке
    */
   var setInitialPageCondition = function () {
     window.adForm.setFormDisabled();

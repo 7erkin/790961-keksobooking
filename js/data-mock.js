@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  window.dataMock = {};
   var ADS_QUANTITY = 8;
   var TITLE = [
     'Большая уютная квартира',
@@ -66,5 +65,7 @@
     }
     return ads;
   };
+
+  window.dataMock = {};
   window.dataMock.ads = createAds(ADS_QUANTITY);
 })();

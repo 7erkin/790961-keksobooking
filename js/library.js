@@ -2,16 +2,16 @@
 
 (function () {
   window.library = {};
-  window.library.setElementAvailable = function (element) {
+  window.library.enableElement = function (element) {
     element.removeAttribute('disabled');
   };
-  window.library.setElementDisabled = function (element) {
+  window.library.disableElement = function (element) {
     element.setAttribute('disabled', 'disabled');
   };
-  window.library.setElementSelected = function (element) {
+  window.library.selectElement = function (element) {
     element.setAttribute('selected', 'selected');
   };
-  window.library.setElementNotSelected = function (element) {
+  window.library.disselectElement = function (element) {
     element.removeAttribute('selected');
   };
   window.library.getRandomValue = function (minValue, maxValue) {
