@@ -50,7 +50,10 @@
           window.library.disableElement(elementOptions[j]);
         }
       }
-      elementCapacity.value = value;
+      var elementCurrent = elementCapacity.querySelector('[value="' + elementCapacity.value + '"]');
+      if (window.library.isElementEnable(elementCurrent)) {
+        elementCapacity.value = value;
+      }
     }
   };
   var onRoomNumberChanged = function (evt) {
