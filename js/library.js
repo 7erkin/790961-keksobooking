@@ -49,6 +49,9 @@
   window.library.removeClassFromElement = function (element, className) {
     element.classList.remove(className);
   };
+  window.library.isElementEnable = function (element) {
+    return element.hasAttribute('disabled');
+  };
   window.library.getElementLocation = function (element) {
     return {
       left: parseFloat(element.style.left, 10),
