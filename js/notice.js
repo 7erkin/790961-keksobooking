@@ -2,50 +2,57 @@
 
 (function () {
 
-  /**
-   * Выполняет управление предупреждениями
-   * @param {HTMLInputElement} elementInput
-   */
-  var correctNotice = function (elementInput) {
-    if (elementInput.validity.valid) {
-      elementInput.style.border = '';
-      if (window.notice.isNoticeAlreadySet(elementInput)) {
-        var elementParent = elementInput.parentElement;
-        elementParent.querySelector('#my-notice').remove();
-      }
+  var hasNotice = function (elementInput) {
+    var elementParent = elementInput.parentElement;
+    var noticeNode = elementParent.querySelector('#my-notice');
+    return noticeNode;
+  };
+  var deleteNotice = function (cssSelector) {
+    var element = document.querySelector(cssSelector);
+    var noticeNode = hasNotice(element);
+    if (noticeNode !== null) {
+      element.style.border = '';
+      noticeNode.remove();
     }
+  };
+  var updateNotice = function (cssSelector) {
+    var element = document.querySelector(cssSelector);
+    if (element.validity.valid) {
+      deleteNotice(cssSelector);
+    }
+  };
+  /**
+   * Получает из шаблона узел, который будет использоваться для установления предупреждения
+   * @return {HTMLDivElement}
+   */
+  var getNoticeNode = function () {
+    var templateNotice = document.querySelector('#my-template').content.querySelector('#my-notice');
+    var noticeNode = templateNotice.cloneNode(true);
+    return noticeNode;
   };
 
   window.notice = {};
 
-  /**
-   * Выполняет управление предупреждениями на всех инпутах, которые могут быть неверно заполнены
-   */
-  window.notice.correctNotices = function () {
-    correctNotice(document.querySelector('#title'));
-    correctNotice(document.querySelector('#price'));
-  };
-
-  /**
-   * Удаляет предупреждение у инпута независимо оттого, валиден ли сейчас инпут или нет
-   * @param {HTMLInputElement} elementInput
-   */
-  window.notice.deleteNotice = function (elementInput) {
-    elementInput.style.border = '';
-    if (window.notice.isNoticeAlreadySet(elementInput)) {
-      var elementParent = elementInput.parentElement;
-      elementParent.querySelector('#my-notice').remove();
+  window.notice.setNotice = function (elementInput, notice) {
+    var noticeNode;
+    noticeNode = hasNotice(elementInput);
+    if (noticeNode === null) {
+      elementInput.style.border = '5px solid red';
+      noticeNode = getNoticeNode();
+      noticeNode.innerText = notice;
+      elementInput.parentElement.appendChild(noticeNode);
+    } else {
+      noticeNode.innerText = notice;
     }
   };
 
-  /**
-   * Проверяет, существует ли ДОМ элемент предупреждения у переданного инпута
-   * @param {HTMLInputElement} elementInput
-   * @return {boolean}
-   */
-  window.notice.isNoticeAlreadySet = function (elementInput) {
-    var elementParent = elementInput.parentElement;
-    var elementNotice = elementParent.querySelector('#my-notice');
-    return (elementNotice === null) ? false : true;
+  window.notice.deleteNotices = function () {
+    deleteNotice('#title');
+    deleteNotice('#price');
+  };
+
+  window.notice.updateNotices = function () {
+    updateNotice('#title');
+    updateNotice('#price');
   };
 })();

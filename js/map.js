@@ -2,6 +2,7 @@
 
 (function () {
   var formAvailable = false;
+  var ads = [];
 
   /**
    * По атрибуту узла, определяет индекс объявления из массива объявлений
@@ -64,7 +65,7 @@
   };
   var openAd = function (element) {
     var index = getNumberAd(element);
-    renderAd(window.dataMock.ads[index]);
+    renderAd(ads[index]);
     window.library.addListenerToDocument('keydown', onCloseAdClicked);
   };
   var closeAd = function () {
@@ -136,12 +137,12 @@
     photoDiv.appendChild(fragment);
   };
   var setMainPageActive = function () {
+    window.backend.fetchAds(onFetched, onConnectionError);
     deleteHandlerOnMainpin();
     setHandlerOnMappins();
     renderMap();
     renderAdForm();
     window.adForm.setFormAvailable();
-    renderPoints(points);
     formAvailable = true;
   };
   var setMainPageNotActive = function () {
@@ -158,10 +159,7 @@
     formAvailable = false;
   };
   var resetNotices = function () {
-    var elementInputTitle = document.querySelector('#title');
-    var elementInputPrice = document.querySelector('#price');
-    window.notice.deleteNotice(elementInputTitle);
-    window.notice.deleteNotice(elementInputPrice);
+    window.notice.deleteNotices();
   };
 
   /**
@@ -173,7 +171,7 @@
     setHandlerOnMainpin();
   };
 
-  var createPointElements = function (ads) {
+  var createPointElements = function () {
     var template = document.querySelector('template').content.querySelector('.map__pin');
     var points = [];
     for (var i = 0; i < ads.length; ++i) {
@@ -202,7 +200,23 @@
     }
   };
 
+  var onConnectionError = function () {
+    window.library.renderErrorMessage('НЕ УДАЛОСЬ ЗАГРУЗИТЬ ОБЪЯВЛЕНИЯ');
+  };
+  var onFetched = function (evt) {
+    var xhr = evt.target;
+    switch (xhr.status) {
+      case 200:
+        ads = xhr.response;
+        var points = createPointElements();
+        renderPoints(points);
+        break;
+      default:
+        window.library.renderErrorMessage('НЕ УДАЛОСЬ ЗАГРУЗИТЬ ОБЪЯВЛЕНИЯ');
+        break;
+    }
+  };
+
   setCustomHandlerResetOnDocument();
   setInitialPageCondition();
-  var points = createPointElements(window.dataMock.ads);
 })();
