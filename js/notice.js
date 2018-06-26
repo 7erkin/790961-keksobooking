@@ -2,6 +2,15 @@
 
 (function () {
 
+  var scrolled = false;
+
+  var scrollToInvalidInput = function (cssSelector) {
+    if (!scrolled) {
+      scrolled = true;
+      var element = document.querySelector(cssSelector);
+      element.scrollIntoView();
+    }
+  };
   var hasNotice = function (elementInput) {
     var elementParent = elementInput.parentElement;
     var noticeNode = elementParent.querySelector('#my-notice');
@@ -19,8 +28,11 @@
     var element = document.querySelector(cssSelector);
     if (element.validity.valid) {
       deleteNotice(cssSelector);
+    } else {
+      scrollToInvalidInput(cssSelector);
     }
   };
+
   /**
    * Получает из шаблона узел, который будет использоваться для установления предупреждения
    * @return {HTMLDivElement}
@@ -52,6 +64,7 @@
   };
 
   window.notice.updateNotices = function () {
+    scrolled = false;
     updateNotice('#title');
     updateNotice('#price');
   };
