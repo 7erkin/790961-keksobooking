@@ -1,7 +1,33 @@
 'use strict';
 
 (function () {
+  var errorHeader = 'ОШИБКА СОЕДИНЕНИЯ: ';
+  var currentTimerId;
+  var getErrorMessage = function () {
+    return document.querySelector('#my-network-error');
+  };
+  var closeErrorMessage = function () {
+    var elementErrorMessage = document.querySelector('#my-network-error');
+    elementErrorMessage.remove();
+  };
+  var getErrorMessageNode = function () {
+    return document.querySelector('#my-template').content.querySelector('#my-network-error');
+  };
+
   window.library = {};
+  window.library.renderErrorMessage = function (error) {
+    var elementErrorMessage = getErrorMessage();
+    if (elementErrorMessage === null) {
+      var templateErrorMessageNode = getErrorMessageNode();
+      var node = templateErrorMessageNode.cloneNode(true);
+      node.innerText = errorHeader + error;
+      document.body.appendChild(node);
+    } else {
+      clearTimeout(currentTimerId);
+      elementErrorMessage.innerText = errorHeader + error;
+    }
+    currentTimerId = setTimeout(closeErrorMessage, 8500);
+  };
   window.library.enableElement = function (element) {
     element.removeAttribute('disabled');
   };
@@ -21,6 +47,13 @@
   window.library.getRandomArrayElement = function (array) {
     var maxValue = array.length - 1;
     return array[window.library.getRandomValue(0, maxValue)];
+  };
+  window.library.getRandomArrayElements = function (array, quantity) {
+    var temp = [];
+    for (var i = 0; i < quantity; ++i) {
+      temp.push(window.library.getRandomArrayElement(array));
+    }
+    return temp;
   };
   window.library.shuffle = function (array) {
     for (var i = array.length - 1; i > 0; --i) {

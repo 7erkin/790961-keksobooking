@@ -84,13 +84,28 @@
   var onSubmitClicked = function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    window.notice.correctNotices();
-    showSuccessSendInfo(); // if we can send message without any errors
+    window.notice.deleteNotices();
+    var data = getDataSend();
+    window.backend.publishAd(data, onPublished, onConnectionError);
+  };
+  var onPublished = function (evt) {
+    var xhr = evt.target;
+    switch (xhr.status) {
+      case 200:
+        showSuccessSendInfo();
+        break;
+      default:
+        window.library.renderErrorMessage('НЕ УДАЛОСЬ ОПУБЛИКОВАТЬ ОБЪЯВЛЕНИЕ');
+        break;
+    }
+  };
+  var onConnectionError = function () {
+    window.library.renderErrorMessage('НЕ УДАЛОСЬ ОПУБЛИКОВАТЬ ОБЪЯВЛЕНИЕ');
   };
   var onInvalidInput = function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    window.notice.correctNotices();
+    window.notice.updateNotices();
     window.validateInput(evt.target);
   };
   var addListenersToAdForm = function () {
@@ -104,7 +119,11 @@
     window.library.addListenerTo('#title', 'invalid', onInvalidInput);
     window.library.addListenerTo('#price', 'invalid', onInvalidInput);
   };
-
+  var getDataSend = function () {
+    var elementForm = document.querySelector('.ad-form');
+    var data = new FormData(elementForm);
+    return data;
+  };
     /**
    * Отображает сообщение об успешной регистрации объявления и устанавливает обработчики для закрытия этого сообщения
    */

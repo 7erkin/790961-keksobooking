@@ -1,0 +1,17 @@
+#my-notice {
+    font-style: italic;
+    color: red;
+}
+#my-network-error {
+    font-style: italic;
+    position: fixed;
+    height: 100px;
+    z-index: 1;
+    background: rgba(200, 50, 100, 0.5);
+    color: white;
+    top: 5px;
+    left: 0px;
+    right: 0px;
+    font-size: 20px;
+    text-align: center;
+}

@@ -3,20 +3,6 @@
 (function () {
 
   /**
-   * Устанавливает предупреждение у невалидного инпута
-   * @param {HTMLElement} elementInput
-   * @param {string} notice
-   * @return {undefined}
-   */
-  var setNotice = function (elementInput, notice) {
-    elementInput.style.border = '5px solid red';
-    if (window.notice.isNoticeAlreadySet(elementInput)) {
-      return;
-    }
-    addNoticeNode(elementInput, notice);
-  };
-
-  /**
    * Создаёт строку ограничений, согласно которым записанная информация в инпут является невалидной
    * @param {HTMLElement} element инпут, введенное значение в котором оказалось невалидным
    * @return {string} строка ограничений для инпута
@@ -53,24 +39,9 @@
    * @param {HTMLInputElement} elementInput
    * @param {string} notice
    */
-  var addNoticeNode = function (elementInput, notice) {
-    var noticeNode = getNoticeNode();
-    noticeNode.innerText = notice;
-    elementInput.parentElement.appendChild(noticeNode);
-  };
-
-  /**
-   * Получает из шаблона узел, который будет использоваться для установления предупреждения
-   * @return {HTMLDivElement}
-   */
-  var getNoticeNode = function () {
-    var templateNotice = document.querySelector('#my-template').content.querySelector('#my-notice');
-    var noticeNode = templateNotice.cloneNode(true);
-    return noticeNode;
-  };
 
   window.validateInput = function (elementInput) {
     var notice = getNotice(elementInput);
-    setNotice(elementInput, notice);
+    window.notice.setNotice(elementInput, notice);
   };
 })();
