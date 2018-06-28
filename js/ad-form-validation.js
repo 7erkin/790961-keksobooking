@@ -1,37 +1,46 @@
+// Модуль отвечающий за валидацию формы. Определяет причину неверного заполнения поля формы
+
 'use strict';
 
 (function () {
 
-  /**
-   * Создаёт строку ограничений, согласно которым записанная информация в инпут является невалидной
-   * @param {HTMLElement} element инпут, введенное значение в котором оказалось невалидным
-   * @return {string} строка ограничений для инпута
-   */
-  var getNotice = function (element) {
+  var validityTypeToNotice = {
+    valueMissing: function () {
+      return 'This field is must being filled';
+    },
+    typeMismatch: function () {
+      return 'Input correct ' + this.type + '!';
+    },
+    tooShort: function () {
+      return 'Input value is too short. Minimum length is ' + this.minLength + ' characters!';
+    },
+    tooLong: function () {
+      return 'Input value is too long. Minimum length is ' + this.maxLength + ' characters!';
+    },
+    rangeUnderflow: function () {
+      return 'Input value is too small. Minimum value is ' + this.min + ' roubles!';
+    },
+    rangeOverflow: function () {
+      return 'Input value is too great. Maximum value is ' + this.max + ' roubles!';
+    },
+    patternMismatch: function () {
+      return 'Input value mismatch with pattern!';
+    }
+  };
+  var getErrorType = function (element) {
     var validity = element.validity;
-    var notices = [];
-    if (validity.valueMissing === true) {
-      notices.push('This field is must being filled');
+    var type;
+    for (type in validity) {
+      if (validity[type] === true) {
+        break;
+      }
     }
-    if (validity.typeMismatch === true) {
-      notices.push('Input correct ' + element.type + '!');
-    }
-    if (validity.tooShort === true) {
-      notices.push('Input value is too short. Minimum length is ' + element.minLength + ' characters!');
-    }
-    if (validity.tooLong === true) {
-      notices.push('Input value is too long. Minimum length is ' + element.maxLength + ' characters!');
-    }
-    if (validity.rangeUnderflow === true) {
-      notices.push('Input value is too small. Minimum value is ' + element.min + ' roubles!');
-    }
-    if (validity.rangeOverflow === true) {
-      notices.push('Input value is too great. Maximum value is ' + element.max + ' roubles!');
-    }
-    if (validity.patternMismatch === true) {
-      notices.push('Input value mismatch with pattern!');
-    }
-    return notices.join('; ');
+    return type;
+  };
+  var getNotice = function (element) {
+    var type = getErrorType(element);
+    var notice = validityTypeToNotice[type].call(element);
+    return notice;
   };
 
   /**

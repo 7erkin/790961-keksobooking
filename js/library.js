@@ -1,7 +1,9 @@
+// Модуль, содержащий общеиспользуемые среди множества модулей функции
+
 'use strict';
 
 (function () {
-  var errorHeader = 'ОШИБКА СОЕДИНЕНИЯ: ';
+  var errorHeader = 'Ошибка соединения: ';
   var currentTimerId;
   var getErrorMessage = function () {
     return document.querySelector('#my-network-error');
@@ -27,6 +29,9 @@
       elementErrorMessage.innerText = errorHeader + error;
     }
     currentTimerId = setTimeout(closeErrorMessage, 8500);
+  };
+  window.library.uncheckElement = function (element) {
+    element.removeAttribute('checked');
   };
   window.library.enableElement = function (element) {
     element.removeAttribute('disabled');
