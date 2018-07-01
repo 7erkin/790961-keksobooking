@@ -34,16 +34,16 @@
   var onPublished = function (evt) {
     var xhr = evt.target;
     switch (xhr.status) {
-      case window.objects.Code.SUCCESS:
+      case window.objects.StatusCode.SUCCESS:
         window.adFormLibrary.showSuccessSendInfo();
         break;
       default:
-        window.library.renderErrorMessage('НЕ УДАЛОСЬ ОПУБЛИКОВАТЬ ОБЪЯВЛЕНИЕ');
+        window.library.renderErrorMessage(window.objects.ErrorMessage.ERROR_PUBLISH);
         break;
     }
   };
   var onConnectionError = function () {
-    window.library.renderErrorMessage('НЕ УДАЛОСЬ ОПУБЛИКОВАТЬ ОБЪЯВЛЕНИЕ');
+    window.library.renderErrorMessage(window.objects.ErrorMessage.ERROR_PUBLISH);
   };
   var onInvalidInput = function (evt) {
     evt.preventDefault();

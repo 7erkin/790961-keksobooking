@@ -4,13 +4,12 @@
 'use strict';
 
 (function () {
-  var ERROR_MESSAGE = 'не удалось загрузить объявления';
 
   /**
    * Колбэк в случае возникновения ошибки запроса
    */
   var onConnectionError = function () {
-    window.library.renderErrorMessage(ERROR_MESSAGE);
+    window.library.renderErrorMessage(window.objects.ErrorMessage.ERROR_DOWNLOAD);
   };
 
   /**
@@ -20,7 +19,7 @@
   var onFetched = function (evt) {
     var xhr = evt.target;
     switch (xhr.status) {
-      case window.objects.Code.SUCCESS:
+      case window.objects.StatusCode.SUCCESS:
         window.dataStorage.adsOrigin = xhr.response;
         window.dataStorage.adsTransform = window.dataStorage.adsOrigin.slice();
         var points = window.mapLibrary.createPointElements();
@@ -28,7 +27,7 @@
         window.mapLibrary.renderFilters();
         break;
       default:
-        window.library.renderErrorMessage(ERROR_MESSAGE);
+        window.library.renderErrorMessage(window.objects.ErrorMessage.ERROR_DOWNLOAD);
         break;
     }
   };

@@ -43,6 +43,7 @@
     window.mapLibrary.resetNotices();
     window.mapLibrary.resetFilterForm();
     window.mapLibrary.hideFilters();
+    window.loadRenderPictures.deletePhotoes();
     setTimeout(window.mainPinCoords.setMainPinBaseLocation, 1);
 
     deleteHandlerOnPageDisactive();

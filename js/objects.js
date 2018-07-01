@@ -27,7 +27,7 @@
     house: 5000,
     bungalo: 0
   };
-  window.objects.Code = {
+  window.objects.StatusCode = {
     SUCCESS: 200,
     CACHED: 302,
     NOT_FOUND_ERROR: 404,
@@ -36,5 +36,9 @@
   window.objects.KeyCode = {
     ESC_CODE: 27,
     ENTER_CODE: 13
+  };
+  window.objects.ErrorMessage = {
+    ERROR_DOWNLOAD: 'не удалось загрузить объявления',
+    ERROR_PUBLISH: 'не удалось опубликовать объявление'
   };
 })();
