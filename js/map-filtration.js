@@ -10,26 +10,29 @@
     high: 50000
   };
   var timerId;
-  var checkLimitParameter = {
-    price: function (ad, limitValue) {
+  var limitParameter = {
+    checkPrice: function (ad, limitValue) {
       var price = ad.offer.price;
       if (limitValue === 'low') {
-        return (price <= PriceLimit.low) ? true : false;
+        return price <= PriceLimit.low;
       }
       if (limitValue === 'high') {
-        return (price >= PriceLimit.high) ? true : false;
+        return price >= PriceLimit.high;
       }
       return (price > PriceLimit.low) && (price < PriceLimit.high);
     },
-    type: function (ad, limitValue) {
+    checkType: function (ad, limitValue) {
       return ad.offer.type === limitValue;
     },
-    guests: function (ad, limitValue) {
+    checkGuests: function (ad, limitValue) {
       return ad.offer.guests === parseInt(limitValue, 10);
     },
-    rooms: function (ad, limitValue) {
+    checkRooms: function (ad, limitValue) {
       return ad.offer.rooms === parseInt(limitValue, 10);
     }
+  };
+  var getFunctionName = function (limitName) {
+    return 'check' + limitName[0].toUpperCase() + limitName.slice(1, limitName.length);
   };
 
   /**
@@ -39,7 +42,8 @@
    * @return {boolean}
    */
   var isParameterMatch = function (limit, ad) {
-    return checkLimitParameter[limit.name](ad, limit.value);
+    var functionName = getFunctionName(limit.name);
+    return limitParameter[functionName](ad, limit.value);
   };
   var isFeatureMatch = function (limit, ad) {
     return (ad.offer.features.indexOf(limit.name) === -1) ? false : true;
