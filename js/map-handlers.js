@@ -17,7 +17,7 @@
     if (evt.target.dataset.adId === undefined) {
       return;
     }
-    if (!(evt.keyCode === window.objects.KeyCode.ENTER_CODE || evt.keyCode === undefined)) {
+    if (!(evt.keyCode === window.objects.KeyCode.ENTER || evt.keyCode === undefined)) {
       return;
     }
     window.adAction.closeAd();
