@@ -34,8 +34,8 @@
     SERVER_ERROR: 500
   };
   window.objects.KeyCode = {
-    ESC_CODE: 27,
-    ENTER_CODE: 13
+    ESC: 27,
+    ENTER: 13
   };
   window.objects.ErrorMessage = {
     ERROR_DOWNLOAD: 'не удалось загрузить объявления',
