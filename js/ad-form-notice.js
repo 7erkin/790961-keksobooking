@@ -1,3 +1,5 @@
+// Модуль отвечающий за корректное отображение ошибок заполнения формы подачи объявлений
+
 'use strict';
 
 (function () {
@@ -44,7 +46,6 @@
   };
 
   window.notice = {};
-
   window.notice.setNotice = function (elementInput, notice) {
     var noticeNode;
     noticeNode = hasNotice(elementInput);
@@ -57,12 +58,10 @@
       noticeNode.innerText = notice;
     }
   };
-
   window.notice.deleteNotices = function () {
     deleteNotice('#title');
     deleteNotice('#price');
   };
-
   window.notice.updateNotices = function () {
     scrolled = false;
     updateNotice('#title');

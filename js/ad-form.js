@@ -1,69 +1,18 @@
+// Модуль, описывающий взаимодействие полей в форме подачи объявлений
+
 'use strict';
 
 (function () {
   var addressField = document.querySelector('#address');
-  var changeTimeIn = function (nextTimeValue) {
-    var elementTimein = document.querySelector('#timein');
-    elementTimein.value = nextTimeValue;
-  };
-  var changeTimeOut = function (nextTimeValue) {
-    var elementTimeout = document.querySelector('#timeout');
-    elementTimeout.value = nextTimeValue;
-  };
-  var changeTime = function (nextTimeValue) {
-    changeTimeIn(nextTimeValue);
-    changeTimeOut(nextTimeValue);
-  };
   var onTimeChanged = function (evt) {
     evt.stopPropagation();
-    changeTime(evt.target.value);
+    window.adFormLibrary.changeTime(evt.target.value);
   };
   var onTypeAppartmentChanged = function (evt) {
-    var elementInputPrice = document.querySelector('#price');
-    elementInputPrice.min = window.objects.MIN_PRICES_FOR_TYPES[evt.target.value];
-    elementInputPrice.placeholder = window.objects.MIN_PRICES_FOR_TYPES[evt.target.value];
-  };
-
-  /**
-   * Задает доступные значения инпута (количество гостей) в соответствии с типом апартаментов (инпут - тип апартаментов),
-   * выбираемых пользователем
-   * @param {number} value значение атрибута поля, которое выбирает пользователь (инпут - тип апартаментов)
-   */
-  var setAvailableQuantityGuests = function (value) {
-    var elementCapacity = document.querySelector('#capacity');
-    var elementOptions = elementCapacity.querySelectorAll('option');
-    var length = elementOptions.length;
-    if (value === '100') {
-      for (var i = 0; i < length; ++i) {
-        if (!(elementOptions[i].value === '0')) {
-          window.library.disableElement(elementOptions[i]);
-        } else {
-          window.library.enableElement(elementOptions[i]);
-        }
-      }
-      elementCapacity.value = '0';
-    } else {
-      for (var j = 0; j < length; ++j) {
-        if (elementOptions[j].value !== '0' && parseInt(elementOptions[j].value, 10) <= parseInt(value, 10)) {
-          window.library.enableElement(elementOptions[j]);
-        } else {
-          window.library.disableElement(elementOptions[j]);
-        }
-      }
-      var elementCurrent = elementCapacity.querySelector('[value="' + elementCapacity.value + '"]');
-      if (window.library.isElementEnable(elementCurrent)) {
-        elementCapacity.value = value;
-      }
-    }
+    window.adFormLibrary.changePrice(evt.target.value);
   };
   var onRoomNumberChanged = function (evt) {
-    setAvailableQuantityGuests(evt.target.value);
-  };
-  var onCapacityChanged = function (evt) {
-    var elementSelected = document.querySelector('#capacity');
-    elementSelected.value = evt.target.value;
-    window.library.disselectElement(elementSelected);
-    window.library.selectElement(evt.target);
+    window.adFormLibrary.setAvailableQuantityGuests(evt.target.value);
   };
 
   /**
@@ -71,36 +20,30 @@
    * в соответствии с требованиями ТЗ. Обработчик события генерирует пользовталельское событие, которое перехватывается в map.js
    * @param {Event} evt
    */
-  var onResetClicked = function (evt) {
-    var newEvent = new Event('resetPageCondition');
-    document.dispatchEvent(newEvent);
-    evt.preventDefault();
+  var onResetClicked = function () {
+    window.adFormLibrary.genDisactivePageEvent();
   };
-  var getFormFieldsets = function () {
-    var elementForm = document.querySelector('.ad-form');
-    var fieldsets = elementForm.querySelectorAll('fieldset');
-    return fieldsets;
-  };
+
   var onSubmitClicked = function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
     window.notice.deleteNotices();
-    var data = getDataSend();
+    var data = window.adFormLibrary.getDataSend();
     window.backend.publishAd(data, onPublished, onConnectionError);
   };
   var onPublished = function (evt) {
     var xhr = evt.target;
     switch (xhr.status) {
-      case 200:
-        showSuccessSendInfo();
+      case window.objects.StatusCode.SUCCESS:
+        window.adFormLibrary.showSuccessSendInfo();
         break;
       default:
-        window.library.renderErrorMessage('НЕ УДАЛОСЬ ОПУБЛИКОВАТЬ ОБЪЯВЛЕНИЕ');
+        window.library.renderErrorMessage(window.objects.ErrorMessage.ERROR_PUBLISH);
         break;
     }
   };
   var onConnectionError = function () {
-    window.library.renderErrorMessage('НЕ УДАЛОСЬ ОПУБЛИКОВАТЬ ОБЪЯВЛЕНИЕ');
+    window.library.renderErrorMessage(window.objects.ErrorMessage.ERROR_PUBLISH);
   };
   var onInvalidInput = function (evt) {
     evt.preventDefault();
@@ -115,69 +58,52 @@
     window.library.addListenerTo('#room_number', 'change', onRoomNumberChanged);
     window.library.addListenerTo('.ad-form', 'reset', onResetClicked);
     window.library.addListenerTo('.ad-form', 'submit', onSubmitClicked);
-    window.library.addListenerTo('#capacity', 'change', onCapacityChanged);
     window.library.addListenerTo('#title', 'invalid', onInvalidInput);
     window.library.addListenerTo('#price', 'invalid', onInvalidInput);
+    addListenersToCheckboxes();
   };
-  var getDataSend = function () {
-    var elementForm = document.querySelector('.ad-form');
-    var data = new FormData(elementForm);
-    return data;
-  };
-    /**
-   * Отображает сообщение об успешной регистрации объявления и устанавливает обработчики для закрытия этого сообщения
-   */
-  var showSuccessSendInfo = function () {
-    var element = document.querySelector('.success');
-    window.library.removeClassFromElement(element, 'hidden');
-    window.library.addListenerToDocument('click', onCloseSuccessSendInfo);
-    window.library.addListenerToDocument('keydown', onCloseSuccessSendInfo);
-  };
-
-  /**
-   * Порождает событие reset на форме подачи объявления.
-   * Вызывается при закрытии окна с инфой об успешной подаче объявления.
-   * На это событие поставлен обработчик из файла ad-form.js c именем onResetClicked
-   */
-  var genEventResetForm = function () {
-    var event = new Event('reset', {bubbles: true});
-    var elementForm = document.querySelector('.ad-form');
-    elementForm.dispatchEvent(event);
-  };
-  var onCloseSuccessSendInfo = function (evt) {
-    var element = document.querySelector('.success');
-    if (!(evt.keyCode === 27 || evt.keyCode === undefined)) {
-      return;
-    }
-    genEventResetForm();
-    window.library.addClassToElement(element, 'hidden');
-    window.library.removeListenerFromDocument('click', onCloseSuccessSendInfo);
+  var addListenersToCheckboxes = function () {
+    var elements = document.querySelectorAll('input[type="checkbox"]');
+    Array.prototype.forEach.call(elements, function (element) {
+      element.addEventListener('keydown', function (evt) {
+        if (evt.keyCode !== window.objects.KeyCode.ENTER) {
+          return;
+        }
+        evt.preventDefault();
+        evt.stopPropagation();
+        evt.stopImmediatePropagation();
+        var elementCheckbox = evt.target;
+        if (window.library.isElementChecked(elementCheckbox)) {
+          window.library.uncheckedElement(elementCheckbox);
+        } else {
+          window.library.checkedElement(elementCheckbox);
+        }
+      });
+    });
   };
 
   window.adForm = {};
   window.adForm.setFormDisabled = function () {
-    var fieldsets = getFormFieldsets();
-    fieldsets.forEach(window.library.disableElement);
+    window.adFormLibrary.disableForm();
+    window.adForm.formAvailable = false;
+    window.adFormLibrary.resetCheckboxes();
+
   };
-  window.adForm.setFormAvailable = function () {
-    var fieldsets = getFormFieldsets();
-    fieldsets.forEach(window.library.enableElement);
+  window.adForm.setFormEnable = function () {
+    window.adFormLibrary.enableForm();
+    window.adForm.formAvailable = true;
+    var element = document.querySelector('#room_number');
+    window.adFormLibrary.setAvailableQuantityGuests(element.value);
   };
   window.adForm.setAddressField = function (x, y) {
     addressField.value = x + ', ' + y;
   };
   window.adForm.resetFields = function () {
     var adForm = document.querySelector('.ad-form');
-    var elementInputs = adForm.querySelectorAll('input');
-    for (var i = 0; i < elementInputs.length; ++i) {
-      if (elementInputs[i].name === 'address') {
-        continue;
-      }
-      elementInputs[i].value = '';
-    }
-    var elementTextArea = adForm.querySelector('textarea');
-    elementTextArea.value = '';
+    adForm.reset();
   };
+  window.adForm.formAvailable = false;
 
   addListenersToAdForm();
+
 })();
