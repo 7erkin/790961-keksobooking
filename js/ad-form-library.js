@@ -27,7 +27,7 @@
   };
   var onCloseSuccessSendInfo = function (evt) {
     var element = document.querySelector('.success');
-    if (!(evt.keyCode === window.objects.KeyCode.ESC_CODE || evt.keyCode === undefined)) {
+    if (!(evt.keyCode === window.objects.KeyCode.ESC || evt.keyCode === undefined)) {
       return;
     }
     genResetFormEvent();
