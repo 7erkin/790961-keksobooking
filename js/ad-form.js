@@ -66,7 +66,7 @@
     var elements = document.querySelectorAll('input[type="checkbox"]');
     Array.prototype.forEach.call(elements, function (element) {
       element.addEventListener('keydown', function (evt) {
-        if (evt.keyCode !== window.objects.KeyCode.ENTER_CODE) {
+        if (evt.keyCode !== window.objects.KeyCode.ENTER) {
           return;
         }
         evt.preventDefault();
@@ -87,6 +87,7 @@
     window.adFormLibrary.disableForm();
     window.adForm.formAvailable = false;
     window.adFormLibrary.resetCheckboxes();
+
   };
   window.adForm.setFormEnable = function () {
     window.adFormLibrary.enableForm();
