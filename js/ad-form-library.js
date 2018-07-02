@@ -3,7 +3,10 @@
 'use strict';
 
 (function () {
-
+  var eventNameToAttribute = {
+    invalid: 'required',
+    submit: 'method'
+  };
   var changeTimeIn = function (nextTimeValue) {
     var elementTimein = document.querySelector('#timein');
     elementTimein.value = nextTimeValue;
@@ -57,7 +60,7 @@
     var elementCapacity = document.querySelector('#capacity');
     var elementOptions = elementCapacity.querySelectorAll('option');
     if (value === '100') {
-      [].slice.call(elementOptions).forEach(function (element) {
+      Array.prototype.forEach.call(elementOptions, function (element) {
         if (!(element.value === '0')) {
           window.library.disableElement(element);
         } else {
@@ -66,7 +69,7 @@
       });
       elementCapacity.value = '0';
     } else {
-      [].slice.call(elementOptions).forEach(function (element) {
+      Array.prototype.forEach.call(elementOptions, function (element) {
         if (element.value !== '0' && parseInt(element.value, 10) <= parseInt(value, 10)) {
           window.library.enableElement(element);
         } else {
@@ -105,5 +108,14 @@
   window.adFormLibrary.genDisactivePageEvent = function () {
     var event = new Event('disactive');
     document.dispatchEvent(event);
+  };
+  window.adFormLibrary.isProperEventTarget = function (element, eventName) {
+    return element.hasAttribute(eventNameToAttribute[eventName]);
+  };
+  window.adFormLibrary.resetCheckboxes = function () {
+    var elements = document.querySelector('.ad-form__element.features').querySelectorAll('input[checked="checked"]');
+    Array.prototype.forEach.call(elements, function (element) {
+      element.removeAttribute('checked');
+    });
   };
 })();

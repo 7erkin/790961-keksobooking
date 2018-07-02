@@ -25,36 +25,45 @@
   var renderer = {
     renderPhoto: function (source) {
       var elementImage = toNode(new this.renderParameters.constructor(source));
-      if (isAnyPhotoes(this.renderParameters.container)) {
-        renderer.deletePhotoes.call(this.renderParameters.container);
+      if (isAnyPhotoes(this.renderParameters.container.node) && !canBeMorePhotoes(this.renderParameters.container)) {
+        renderer.deletePhotoes.call(this.renderParameters.container.node);
       }
-      this.renderParameters.container.appendChild(elementImage);
+      this.renderParameters.container.node.appendChild(elementImage);
     },
     deletePhotoes: function () {
       var elementPhotoes = this.querySelectorAll('img');
-      [].slice.call(elementPhotoes).forEach(function (photo) {
+      Array.prototype.forEach.call(elementPhotoes, function (photo) {
         photo.remove();
       });
     }
   };
   var idInputFileToRenderParameters = {
     images: {
-      container: document.querySelector('.ad-form__photo'),
+      container: {
+        node: document.querySelector('.ad-form__photo'),
+        moreThanOnePhoto: true
+      },
       constructor: ImageApartments
     },
     avatar: {
-      container: document.querySelector('.ad-form-header__preview'),
+      container: {
+        node: document.querySelector('.ad-form-header__preview'),
+        moreThanOnePhoto: false
+      },
       constructor: ImageAvatar
     }
   };
   var isAnyPhotoes = function (elementContainer) {
     return (elementContainer.querySelector('img') !== null) ? true : false;
   };
+  var canBeMorePhotoes = function (elementContainer) {
+    return elementContainer.moreThanOnePhoto;
+  };
 
   var onChanged = function (evt) {
     var elementInput = evt.target;
     elementInput.renderParameters = idInputFileToRenderParameters[elementInput.id];
-    [].slice.call(elementInput.files).forEach(function (file) {
+    Array.prototype.forEach.call(elementInput.files, function (file) {
       var fileName = file.name.toLowerCase();
       var match = FILE_TYPES.some(function (typeName) {
         return fileName.endsWith(typeName);
@@ -85,7 +94,7 @@
   window.loadRenderPictures = {};
   window.loadRenderPictures.deletePhotoes = function () {
     Object.keys(idInputFileToRenderParameters).forEach(function (key) {
-      var container = idInputFileToRenderParameters[key].container;
+      var container = idInputFileToRenderParameters[key].container.node;
       if (isAnyPhotoes(container)) {
         renderer.deletePhotoes.call(container);
       }

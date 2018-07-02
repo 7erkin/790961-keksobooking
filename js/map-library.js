@@ -18,6 +18,12 @@
     };
   };
   var iconGeometry = getIconGeometry();
+  var resetFilterCheckboxes = function () {
+    var elements = document.querySelector('#housing-features').querySelectorAll('input[checked="checked"]');
+    Array.prototype.forEach.call(elements, function (element) {
+      element.removeAttribute('checked');
+    });
+  };
 
   window.mapLibrary = {};
   window.mapLibrary.renderAdForm = function () {
@@ -51,6 +57,7 @@
   window.mapLibrary.hideFilters = function () {
     var elementFilter = document.querySelector('.map__filters-container');
     window.library.addClassToElement(elementFilter, 'hidden');
+    resetFilterCheckboxes();
   };
 
   window.mapLibrary.createPointElements = function () {
@@ -72,7 +79,7 @@
   window.mapLibrary.deletePoints = function () {
     var container = document.querySelector('.map__pins');
     var elementsCards = container.querySelectorAll('[data-ad-button]');
-    [].slice.call(elementsCards).forEach(function (element) {
+    Array.prototype.forEach.call(elementsCards, function (element) {
       element.remove();
     });
   };

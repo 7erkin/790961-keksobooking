@@ -3,6 +3,8 @@
 'use strict';
 
 (function () {
+  var TIME_DELAY = 500;
+
   var PriceLimit = {
     low: 10000,
     high: 50000
@@ -74,7 +76,7 @@
    */
   var getChangedSelects = function () {
     var selects = document.querySelectorAll('.map__filters > select');
-    var changedSelects = [].slice.call(selects).filter(function (select) {
+    var changedSelects = Array.prototype.filter.call(selects, function (select) {
       return select.value !== 'any';
     });
     return changedSelects;
@@ -86,7 +88,7 @@
    */
   var getCheckedFeatures = function () {
     var features = document.querySelectorAll('.map__filters fieldset input');
-    var checkedFeatures = [].slice.call(features).filter(function (feature) {
+    var checkedFeatures = Array.prototype.filter.call(features, function (feature) {
       return feature.checked === true;
     });
     return checkedFeatures;
@@ -162,7 +164,7 @@
   var onChanged = function () {
     genCloseAdEvent();
     clearTimeout(timerId);
-    timerId = setTimeout(filterAds, 5000);
+    timerId = setTimeout(filterAds, TIME_DELAY);
   };
 
   window.library.addListenerTo('.map__filters', 'change', onChanged);

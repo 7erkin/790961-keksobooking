@@ -30,8 +30,14 @@
     }
     currentTimerId = setTimeout(closeErrorMessage, 8500);
   };
-  window.library.uncheckElement = function (element) {
+  window.library.uncheckedElement = function (element) {
     element.removeAttribute('checked');
+  };
+  window.library.checkedElement = function (element) {
+    element.setAttribute('checked', 'checked');
+  };
+  window.library.isElementChecked = function (element) {
+    return element.hasAttribute('checked');
   };
   window.library.enableElement = function (element) {
     element.removeAttribute('disabled');

@@ -3,7 +3,7 @@
 'use strict';
 
 (function () {
-  var setAppartmentsPhotoes = function (card, templatePhoto, photos) {
+  var setApartmentPhotoes = function (card, templatePhoto, photos) {
     if (!photos.length) {
       return;
     }
@@ -17,14 +17,15 @@
     });
     photoDiv.appendChild(fragment);
   };
-
-  window.adAction = {};
   var getNumberAd = function (element) {
     return element.dataset.adId;
   };
+
+  window.adAction = {};
   window.adAction.renderAd = function (ad) {
-    var templateCard = document.querySelector('template').content.querySelector('.map__card');
-    var templatePhoto = document.querySelector('template').content.querySelector('.popup__photo');
+    var template = document.querySelector('template');
+    var templateCard = template.content.querySelector('.map__card');
+    var templatePhoto = template.content.querySelector('.popup__photo');
     var card = templateCard.cloneNode(true);
     card.querySelector('.popup__avatar').src = ad.author.avatar;
     card.querySelector('.popup__title').textContent = ad.offer.title;
@@ -35,7 +36,7 @@
     card.querySelector('.popup__text--time').textContent = ad.offer.rooms + ' комнаты для ' + ad.offer.guests + ' гостей';
     card.querySelector('.popup__features').textContent = ad.offer.features;
     card.querySelector('.popup__text--time').textContent = 'Заезд после' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
-    setAppartmentsPhotoes(card, templatePhoto, ad.offer.photos);
+    setApartmentPhotoes(card, templatePhoto, ad.offer.photos);
     var container = document.querySelector('.map');
     var nextSiblingElement = container.querySelector('.map__filters-container');
     container.insertBefore(card, nextSiblingElement);

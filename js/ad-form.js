@@ -60,12 +60,33 @@
     window.library.addListenerTo('.ad-form', 'submit', onSubmitClicked);
     window.library.addListenerTo('#title', 'invalid', onInvalidInput);
     window.library.addListenerTo('#price', 'invalid', onInvalidInput);
+    addListenersToCheckboxes();
+  };
+  var addListenersToCheckboxes = function () {
+    var elements = document.querySelectorAll('input[type="checkbox"]');
+    Array.prototype.forEach.call(elements, function (element) {
+      element.addEventListener('keydown', function (evt) {
+        if (evt.keyCode !== window.objects.KeyCode.ENTER_CODE) {
+          return;
+        }
+        evt.preventDefault();
+        evt.stopPropagation();
+        evt.stopImmediatePropagation();
+        var elementCheckbox = evt.target;
+        if (window.library.isElementChecked(elementCheckbox)) {
+          window.library.uncheckedElement(elementCheckbox);
+        } else {
+          window.library.checkedElement(elementCheckbox);
+        }
+      });
+    });
   };
 
   window.adForm = {};
   window.adForm.setFormDisabled = function () {
     window.adFormLibrary.disableForm();
     window.adForm.formAvailable = false;
+    window.adFormLibrary.resetCheckboxes();
   };
   window.adForm.setFormEnable = function () {
     window.adFormLibrary.enableForm();
