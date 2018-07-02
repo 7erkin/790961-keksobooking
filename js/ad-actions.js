@@ -3,6 +3,8 @@
 'use strict';
 
 (function () {
+  var template = document.querySelector('template');
+
   var setApartmentPhotoes = function (card, templatePhoto, photos) {
     if (!photos.length) {
       return;
@@ -23,7 +25,6 @@
 
   window.adAction = {};
   window.adAction.renderAd = function (ad) {
-    var template = document.querySelector('template');
     var templateCard = template.content.querySelector('.map__card');
     var templatePhoto = template.content.querySelector('.popup__photo');
     var card = templateCard.cloneNode(true);
@@ -57,7 +58,7 @@
     }
   };
   var onCloseAdClicked = function (evt) {
-    if (evt.keyCode === window.objects.KeyCode.ENTER_CODE || evt.keyCode === window.objects.KeyCode.ESC_CODE || evt.keyCode === undefined) {
+    if (evt.keyCode === window.objects.KeyCode.ENTER || evt.keyCode === window.objects.KeyCode.ESC || evt.keyCode === undefined) {
       window.adAction.closeAd();
     }
   };
