@@ -91,6 +91,8 @@
   window.adForm.setFormEnable = function () {
     window.adFormLibrary.enableForm();
     window.adForm.formAvailable = true;
+    var element = document.querySelector('#room_number');
+    window.adFormLibrary.setAvailableQuantityGuests(element.value);
   };
   window.adForm.setAddressField = function (x, y) {
     addressField.value = x + ', ' + y;
