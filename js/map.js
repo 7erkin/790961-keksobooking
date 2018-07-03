@@ -7,12 +7,15 @@
   var setHandlerOnPageActive = function () {
     window.library.addListenerToDocument('active', onPageSetActive);
   };
+
   var setHandlerOnPageDisactive = function () {
     window.library.addListenerToDocument('disactive', onPageSetDisactive);
   };
+
   var deleteHandlerOnPageActive = function () {
     window.library.removeListenerFromDocument('active', onPageSetActive);
   };
+
   var deleteHandlerOnPageDisactive = function () {
     window.library.removeListenerFromDocument('disactive', onPageSetDisactive);
   };
@@ -31,7 +34,7 @@
   };
 
   var onPageSetDisactive = function () {
-    window.adAction.closeAd();
+    window.adAction.close();
     window.adForm.resetFields();
     window.adForm.setFormDisabled();
     window.mapHandler.deleteHandlerOnMappins();
@@ -43,7 +46,7 @@
     window.mapLibrary.resetNotices();
     window.mapLibrary.resetFilterForm();
     window.mapLibrary.hideFilters();
-    window.loadRenderPictures.deletePhotoes();
+    window.loadRenderPictures.deletePhotos();
     setTimeout(window.mainPinCoords.setMainPinBaseLocation, 1);
 
     deleteHandlerOnPageDisactive();

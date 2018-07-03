@@ -3,17 +3,9 @@
 'use strict';
 
 (function () {
-  var eventNameToAttribute = {
-    invalid: 'required',
-    submit: 'method'
-  };
-  var changeTimeIn = function (nextTimeValue) {
-    var elementTimein = document.querySelector('#timein');
-    elementTimein.value = nextTimeValue;
-  };
-  var changeTimeOut = function (nextTimeValue) {
-    var elementTimeout = document.querySelector('#timeout');
-    elementTimeout.value = nextTimeValue;
+  var EventNameToAttribute = {
+    INVALID: 'required',
+    SUBMIT: 'method'
   };
 
   /**
@@ -25,6 +17,7 @@
     var event = new Event('reset', {bubbles: true});
     document.querySelector('.ad-form').dispatchEvent(event);
   };
+
   var onCloseSuccessSendInfo = function (evt) {
     var element = document.querySelector('.success');
     if (!(evt.keyCode === window.objects.KeyCode.ESC || evt.keyCode === undefined)) {
@@ -34,6 +27,7 @@
     window.library.addClassToElement(element, 'hidden');
     window.library.removeListenerFromDocument('click', onCloseSuccessSendInfo);
   };
+
   var getFormFieldsets = function () {
     var elementForm = document.querySelector('.ad-form');
     var fieldsets = elementForm.querySelectorAll('fieldset');
@@ -41,10 +35,14 @@
   };
 
   window.adFormLibrary = {};
+
   window.adFormLibrary.changeTime = function (nextTimeValue) {
-    changeTimeIn(nextTimeValue);
-    changeTimeOut(nextTimeValue);
+    var elementTimein = document.querySelector('#timein');
+    var elementTimeout = document.querySelector('#timeout');
+    elementTimein.value = nextTimeValue;
+    elementTimeout.value = nextTimeValue;
   };
+
   window.adFormLibrary.changePrice = function (price) {
     var elementInputPrice = document.querySelector('#price');
     elementInputPrice.min = window.objects.MinPriceTypeApartment[price];
@@ -82,6 +80,7 @@
       }
     }
   };
+
   window.adFormLibrary.getDataSend = function () {
     var elementForm = document.querySelector('.ad-form');
     var data = new FormData(elementForm);
@@ -97,21 +96,26 @@
     window.library.addListenerToDocument('click', onCloseSuccessSendInfo);
     window.library.addListenerToDocument('keydown', onCloseSuccessSendInfo);
   };
+
   window.adFormLibrary.enableForm = function () {
     var fieldsets = getFormFieldsets();
     fieldsets.forEach(window.library.enableElement);
   };
+
   window.adFormLibrary.disableForm = function () {
     var fieldsets = getFormFieldsets();
     fieldsets.forEach(window.library.disableElement);
   };
+
   window.adFormLibrary.genDisactivePageEvent = function () {
     var event = new Event('disactive');
     document.dispatchEvent(event);
   };
+
   window.adFormLibrary.isProperEventTarget = function (element, eventName) {
-    return element.hasAttribute(eventNameToAttribute[eventName]);
+    return element.hasAttribute(EventNameToAttribute[eventName.toUpperCase()]);
   };
+
   window.adFormLibrary.resetCheckboxes = function () {
     var elements = document.querySelector('.ad-form__element.features').querySelectorAll('input[checked="checked"]');
     Array.prototype.forEach.call(elements, function (element) {

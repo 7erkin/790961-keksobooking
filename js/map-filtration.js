@@ -4,7 +4,6 @@
 
 (function () {
   var TIME_DELAY = 500;
-
   var PriceLimit = {
     low: 10000,
     high: 50000
@@ -31,6 +30,7 @@
       return ad.offer.rooms === parseInt(limitValue, 10);
     }
   };
+
   var getFunctionName = function (limitName) {
     return 'check' + limitName[0].toUpperCase() + limitName.slice(1, limitName.length);
   };
@@ -45,6 +45,7 @@
     var functionName = getFunctionName(limit.name);
     return limitParameter[functionName](ad, limit.value);
   };
+
   var isFeatureMatch = function (limit, ad) {
     return (ad.offer.features.indexOf(limit.name) === -1) ? false : true;
   };
@@ -165,7 +166,10 @@
     }
   };
 
-  var onChanged = function () {
+  var onChanged = function (evt) {
+    if (!(evt.keyCode === window.objects.KeyCode.ENTER || evt.keyCode === undefined)) {
+      return;
+    }
     genCloseAdEvent();
     clearTimeout(timerId);
     timerId = setTimeout(filterAds, TIME_DELAY);
@@ -173,4 +177,5 @@
 
   window.library.addListenerTo('.map__filters', 'change', onChanged);
   window.library.addListenerTo('.map__features', 'check', onChanged);
+  window.library.addListenerTo('.map__features', 'keyup', onChanged);
 })();

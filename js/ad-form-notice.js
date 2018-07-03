@@ -3,7 +3,6 @@
 'use strict';
 
 (function () {
-
   var scrolled = false;
 
   var scrollToInvalidInput = function (cssSelector) {
@@ -13,11 +12,13 @@
       element.scrollIntoView();
     }
   };
+
   var hasNotice = function (elementInput) {
     var elementParent = elementInput.parentElement;
     var noticeNode = elementParent.querySelector('#my-notice');
     return noticeNode;
   };
+
   var deleteNotice = function (cssSelector) {
     var element = document.querySelector(cssSelector);
     var noticeNode = hasNotice(element);
@@ -26,6 +27,7 @@
       noticeNode.remove();
     }
   };
+
   var updateNotice = function (cssSelector) {
     var element = document.querySelector(cssSelector);
     if (element.validity.valid) {
@@ -46,7 +48,8 @@
   };
 
   window.notice = {};
-  window.notice.setNotice = function (elementInput, notice) {
+
+  window.notice.set = function (elementInput, notice) {
     var noticeNode;
     noticeNode = hasNotice(elementInput);
     if (noticeNode === null) {
@@ -58,11 +61,13 @@
       noticeNode.innerText = notice;
     }
   };
-  window.notice.deleteNotices = function () {
+
+  window.notice.delete = function () {
     deleteNotice('#title');
     deleteNotice('#price');
   };
-  window.notice.updateNotices = function () {
+
+  window.notice.update = function () {
     scrolled = false;
     updateNotice('#title');
     updateNotice('#price');
