@@ -4,7 +4,8 @@
   var DEFAULT_IMAGE_WIDTH = 70;
   var DEFAULT_IMAGE_HEIGHT = 70;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-  var elementDefaultAvatarPhoto = document.querySelector('.ad-form-header__preview').querySelector('img');
+  var elementAvatarContainer = document.querySelector('.ad-form-header__preview');
+  var elementDefaultAvatarPhoto = elementAvatarContainer.querySelector('img');
 
   var Image = function (config, source) {
     this.width = config.width || DEFAULT_IMAGE_WIDTH;
@@ -31,8 +32,8 @@
       this.renderParameters.container.node.appendChild(elementImage);
     },
     deletePhotos: function () {
-      var elementPhotoes = this.querySelectorAll('img');
-      Array.prototype.forEach.call(elementPhotoes, function (photo) {
+      var elementPhotos = this.querySelectorAll('img');
+      Array.prototype.forEach.call(elementPhotos, function (photo) {
         photo.remove();
       });
     }
@@ -85,8 +86,7 @@
   };
 
   var renderDefaultAvatarPhoto = function () {
-    var elementContainer = document.querySelector('.ad-form-header__preview');
-    elementContainer.appendChild(elementDefaultAvatarPhoto);
+    elementAvatarContainer.appendChild(elementDefaultAvatarPhoto);
   };
 
   var addListeners = function () {

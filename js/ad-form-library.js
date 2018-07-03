@@ -3,12 +3,18 @@
 'use strict';
 
 (function () {
+  var MinPriceToTypeApartment = {
+    palace: 10000,
+    flat: 1000,
+    house: 5000,
+    bungalo: 0
+  };
   var EventNameToAttribute = {
     INVALID: 'required',
     SUBMIT: 'method'
   };
   var elementForm = document.querySelector('.ad-form');
-  var fieldsets = elementForm.querySelectorAll('fieldset');
+  var elementsFieldset = elementForm.querySelectorAll('fieldset');
   var elementSuccessMessage = document.querySelector('.success');
   var elementTimein = document.querySelector('#timein');
   var elementTimeout = document.querySelector('#timeout');
@@ -23,7 +29,7 @@
    */
   var genResetFormEvent = function () {
     var event = new Event('reset', {bubbles: true});
-    document.querySelector('.ad-form').dispatchEvent(event);
+    elementForm.dispatchEvent(event);
   };
 
   var onCloseSuccessSendInfo = function (evt) {
@@ -44,8 +50,8 @@
   };
 
   window.adFormLibrary.changePrice = function (price) {
-    elementInputPrice.min = window.objects.MinPriceTypeApartment[price];
-    elementInputPrice.placeholder = window.objects.MinPriceTypeApartment[price];
+    elementInputPrice.min = MinPriceToTypeApartment[price];
+    elementInputPrice.placeholder = MinPriceToTypeApartment[price];
   };
 
   /**
@@ -93,11 +99,11 @@
   };
 
   window.adFormLibrary.enableForm = function () {
-    fieldsets.forEach(window.library.enableElement);
+    elementsFieldset.forEach(window.library.enableElement);
   };
 
   window.adFormLibrary.disableForm = function () {
-    fieldsets.forEach(window.library.disableElement);
+    elementsFieldset.forEach(window.library.disableElement);
   };
 
   window.adFormLibrary.genDisactivePageEvent = function () {

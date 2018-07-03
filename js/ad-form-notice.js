@@ -4,6 +4,7 @@
 
 (function () {
   var scrolled = false;
+  var templateNotice = document.querySelector('#my-template').content.querySelector('#my-notice');
 
   var scrollToInvalidInput = function (cssSelector) {
     if (!scrolled) {
@@ -42,7 +43,6 @@
    * @return {HTMLDivElement}
    */
   var getNoticeNode = function () {
-    var templateNotice = document.querySelector('#my-template').content.querySelector('#my-notice');
     var noticeNode = templateNotice.cloneNode(true);
     return noticeNode;
   };
@@ -50,8 +50,7 @@
   window.notice = {};
 
   window.notice.set = function (elementInput, notice) {
-    var noticeNode;
-    noticeNode = hasNotice(elementInput);
+    var noticeNode = hasNotice(elementInput);
     if (noticeNode === null) {
       elementInput.style.border = '5px solid red';
       noticeNode = getNoticeNode();

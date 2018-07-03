@@ -5,6 +5,7 @@
 (function () {
   var ERROR_HEADER = 'Ошибка соединения: ';
   var currentTimerId;
+  var templateErrorMessageNode = document.querySelector('#my-template').content.querySelector('#my-network-error');
 
   var getErrorMessage = function () {
     return document.querySelector('#my-network-error');
@@ -15,16 +16,11 @@
     elementErrorMessage.remove();
   };
 
-  var getErrorMessageNode = function () {
-    return document.querySelector('#my-template').content.querySelector('#my-network-error');
-  };
-
   window.library = {};
 
   window.library.renderErrorMessage = function (error) {
     var elementErrorMessage = getErrorMessage();
     if (elementErrorMessage === null) {
-      var templateErrorMessageNode = getErrorMessageNode();
       var node = templateErrorMessageNode.cloneNode(true);
       node.innerText = ERROR_HEADER + error;
       document.body.appendChild(node);

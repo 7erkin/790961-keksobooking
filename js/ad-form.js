@@ -4,6 +4,9 @@
 
 (function () {
   var addressField = document.querySelector('#address');
+  var elementsCheckbox = document.querySelectorAll('input[type="checkbox"]');
+  var elementSelect = document.querySelector('#room_number');
+  var elementForm = document.querySelector('.ad-form');
 
   var onTimeChanged = function (evt) {
     evt.stopPropagation();
@@ -71,8 +74,7 @@
   };
 
   var addListenersToCheckboxes = function () {
-    var elements = document.querySelectorAll('input[type="checkbox"]');
-    Array.prototype.forEach.call(elements, function (element) {
+    Array.prototype.forEach.call(elementsCheckbox, function (element) {
       element.addEventListener('keydown', function (evt) {
         if (evt.keyCode !== window.objects.KeyCode.ENTER) {
           return;
@@ -83,9 +85,9 @@
         var elementCheckbox = evt.target;
         if (window.library.isElementChecked(elementCheckbox)) {
           window.library.uncheckElement(elementCheckbox);
-        } else {
-          window.library.checkElement(elementCheckbox);
+          return;
         }
+        window.library.checkElement(elementCheckbox);
       });
     });
   };
@@ -102,8 +104,7 @@
   window.adForm.setEnable = function () {
     window.adFormLibrary.enableForm();
     window.adForm.available = true;
-    var element = document.querySelector('#room_number');
-    window.adFormLibrary.setAvailableQuantityGuests(element.value);
+    window.adFormLibrary.setAvailableQuantityGuests(elementSelect.value);
   };
 
   window.adForm.setAddressField = function (x, y) {
@@ -111,8 +112,7 @@
   };
 
   window.adForm.resetFields = function () {
-    var adForm = document.querySelector('.ad-form');
-    adForm.reset();
+    elementForm.reset();
   };
 
   window.adForm.available = false;
