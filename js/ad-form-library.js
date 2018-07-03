@@ -26,6 +26,7 @@
     genResetFormEvent();
     window.library.addClassToElement(element, 'hidden');
     window.library.removeListenerFromDocument('click', onCloseSuccessSendInfo);
+    window.library.removeListenerFromDocument('keydown', onCloseSuccessSendInfo);
   };
 
   var getFormFieldsets = function () {

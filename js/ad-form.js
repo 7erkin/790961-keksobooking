@@ -92,14 +92,14 @@
 
   window.adForm = {};
 
-  window.adForm.setFormDisabled = function () {
+  window.adForm.setDisabled = function () {
     window.adFormLibrary.disableForm();
     window.adForm.available = false;
     window.adFormLibrary.resetCheckboxes();
 
   };
 
-  window.adForm.setFormEnable = function () {
+  window.adForm.setEnable = function () {
     window.adFormLibrary.enableForm();
     window.adForm.available = true;
     var element = document.querySelector('#room_number');

@@ -22,7 +22,7 @@
 
   var onPageSetActive = function () {
     window.dataStorage.downloadAds();
-    window.adForm.setFormEnable();
+    window.adForm.setEnable();
     window.mapLibrary.renderMap();
     window.mapLibrary.renderAdForm();
     window.mapHandler.deleteHandlerOnMainpin();
@@ -36,7 +36,7 @@
   var onPageSetDisactive = function () {
     window.adAction.close();
     window.adForm.resetFields();
-    window.adForm.setFormDisabled();
+    window.adForm.setDisabled();
     window.mapHandler.deleteHandlerOnMappins();
     window.mapHandler.deleteHandlerUpdateMap();
     window.mapHandler.setHandlerOnMainpin();
@@ -57,7 +57,7 @@
    * Устанавливает страницу в начальное состояние
    */
   var setInitialPageCondition = function () {
-    window.adForm.setFormDisabled();
+    window.adForm.setDisabled();
     window.mapLibrary.hideFilters();
     window.mapHandler.setHandlerOnMainpin();
     window.mapHandler.setCustomHandlerResetOnDocument();
