@@ -7,6 +7,7 @@
   var URL_POST = 'https://js.dump.academy/keksobooking';
 
   window.backend = {};
+
   window.backend.publishAd = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onLoad);
@@ -16,6 +17,7 @@
 
     xhr.send(data);
   };
+
   window.backend.fetchAds = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('load', onLoad);

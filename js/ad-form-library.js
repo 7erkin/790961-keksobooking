@@ -3,18 +3,24 @@
 'use strict';
 
 (function () {
-  var eventNameToAttribute = {
+  var TypeApartmentToMinPrice = {
+    palace: 10000,
+    flat: 1000,
+    house: 5000,
+    bungalo: 0
+  };
+  var EventNameToAttribute = {
     invalid: 'required',
     submit: 'method'
   };
-  var changeTimeIn = function (nextTimeValue) {
-    var elementTimein = document.querySelector('#timein');
-    elementTimein.value = nextTimeValue;
-  };
-  var changeTimeOut = function (nextTimeValue) {
-    var elementTimeout = document.querySelector('#timeout');
-    elementTimeout.value = nextTimeValue;
-  };
+  var elementForm = document.querySelector('.ad-form');
+  var elementsFieldset = elementForm.querySelectorAll('fieldset');
+  var elementSuccessMessage = document.querySelector('.success');
+  var elementTimein = document.querySelector('#timein');
+  var elementTimeout = document.querySelector('#timeout');
+  var elementInputPrice = document.querySelector('#price');
+  var elementCapacity = document.querySelector('#capacity');
+  var elementsOption = elementCapacity.querySelectorAll('option');
 
   /**
    * Порождает событие reset на форме подачи объявления.
@@ -23,32 +29,29 @@
    */
   var genResetFormEvent = function () {
     var event = new Event('reset', {bubbles: true});
-    document.querySelector('.ad-form').dispatchEvent(event);
+    elementForm.dispatchEvent(event);
   };
+
   var onCloseSuccessSendInfo = function (evt) {
-    var element = document.querySelector('.success');
     if (!(evt.keyCode === window.objects.KeyCode.ESC || evt.keyCode === undefined)) {
       return;
     }
     genResetFormEvent();
-    window.library.addClassToElement(element, 'hidden');
+    window.library.addClassToElement(elementSuccessMessage, 'hidden');
     window.library.removeListenerFromDocument('click', onCloseSuccessSendInfo);
-  };
-  var getFormFieldsets = function () {
-    var elementForm = document.querySelector('.ad-form');
-    var fieldsets = elementForm.querySelectorAll('fieldset');
-    return fieldsets;
+    window.library.removeListenerFromDocument('keydown', onCloseSuccessSendInfo);
   };
 
   window.adFormLibrary = {};
+
   window.adFormLibrary.changeTime = function (nextTimeValue) {
-    changeTimeIn(nextTimeValue);
-    changeTimeOut(nextTimeValue);
+    elementTimein.value = nextTimeValue;
+    elementTimeout.value = nextTimeValue;
   };
-  window.adFormLibrary.changePrice = function (price) {
-    var elementInputPrice = document.querySelector('#price');
-    elementInputPrice.min = window.objects.MinPriceTypeApartment[price];
-    elementInputPrice.placeholder = window.objects.MinPriceTypeApartment[price];
+
+  window.adFormLibrary.changePrice = function (typeApartment) {
+    elementInputPrice.min = TypeApartmentToMinPrice[typeApartment];
+    elementInputPrice.placeholder = TypeApartmentToMinPrice[typeApartment];
   };
 
   /**
@@ -57,10 +60,8 @@
    * @param {number} value значение атрибута поля, которое выбирает пользователь (инпут - тип апартаментов)
    */
   window.adFormLibrary.setAvailableQuantityGuests = function (value) {
-    var elementCapacity = document.querySelector('#capacity');
-    var elementOptions = elementCapacity.querySelectorAll('option');
     if (value === '100') {
-      Array.prototype.forEach.call(elementOptions, function (element) {
+      Array.prototype.forEach.call(elementsOption, function (element) {
         if (!(element.value === '0')) {
           window.library.disableElement(element);
         } else {
@@ -69,7 +70,7 @@
       });
       elementCapacity.value = '0';
     } else {
-      Array.prototype.forEach.call(elementOptions, function (element) {
+      Array.prototype.forEach.call(elementsOption, function (element) {
         if (element.value !== '0' && parseInt(element.value, 10) <= parseInt(value, 10)) {
           window.library.enableElement(element);
         } else {
@@ -82,8 +83,8 @@
       }
     }
   };
+
   window.adFormLibrary.getDataSend = function () {
-    var elementForm = document.querySelector('.ad-form');
     var data = new FormData(elementForm);
     return data;
   };
@@ -92,29 +93,31 @@
    * Отображает сообщение об успешной регистрации объявления и устанавливает обработчики для закрытия этого сообщения
    */
   window.adFormLibrary.showSuccessSendInfo = function () {
-    var element = document.querySelector('.success');
-    window.library.removeClassFromElement(element, 'hidden');
+    window.library.removeClassFromElement(elementSuccessMessage, 'hidden');
     window.library.addListenerToDocument('click', onCloseSuccessSendInfo);
     window.library.addListenerToDocument('keydown', onCloseSuccessSendInfo);
   };
+
   window.adFormLibrary.enableForm = function () {
-    var fieldsets = getFormFieldsets();
-    fieldsets.forEach(window.library.enableElement);
+    elementsFieldset.forEach(window.library.enableElement);
   };
+
   window.adFormLibrary.disableForm = function () {
-    var fieldsets = getFormFieldsets();
-    fieldsets.forEach(window.library.disableElement);
+    elementsFieldset.forEach(window.library.disableElement);
   };
+
   window.adFormLibrary.genDisactivePageEvent = function () {
     var event = new Event('disactive');
     document.dispatchEvent(event);
   };
+
   window.adFormLibrary.isProperEventTarget = function (element, eventName) {
-    return element.hasAttribute(eventNameToAttribute[eventName]);
+    return element.hasAttribute(EventNameToAttribute[eventName]);
   };
+
   window.adFormLibrary.resetCheckboxes = function () {
-    var elements = document.querySelector('.ad-form__element.features').querySelectorAll('input[checked="checked"]');
-    Array.prototype.forEach.call(elements, function (element) {
+    var checkedCheckboxes = document.querySelector('.ad-form__element.features').querySelectorAll('input[checked="checked"]');
+    Array.prototype.forEach.call(checkedCheckboxes, function (element) {
       element.removeAttribute('checked');
     });
   };

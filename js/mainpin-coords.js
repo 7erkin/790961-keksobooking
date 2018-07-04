@@ -3,32 +3,37 @@
 'use strict';
 
 (function () {
-  var elementMainPin = document.querySelector('.map__pin--main');
-  var smallShift = 15;
-  var PIN_WIDTH = elementMainPin.offsetWidth;
-  var PIN_HEIGHT = elementMainPin.offsetHeight;
+  var SMALL_SHIFT = 15;
   var MAX_Y = 630;
   var MIN_Y = 130;
-  var MAX_X = document.querySelector('.map').offsetWidth;
   var MIN_X = 0;
+  var maxX = document.querySelector('.map').offsetWidth;
+  var elementMainPin = document.querySelector('.map__pin--main');
+  var pinWidth = elementMainPin.offsetWidth;
+  var pinHeight = elementMainPin.offsetHeight;
   var baseMainPinCoords = {
     x: elementMainPin.offsetLeft,
     y: elementMainPin.offsetTop
   };
+
   var isMoveXAvailable = function (nextCoordX) {
-    return (nextCoordX + PIN_WIDTH / 2 <= MIN_X || nextCoordX + PIN_WIDTH / 2 >= MAX_X) ? false : true;
+    return (nextCoordX + pinWidth / 2 <= MIN_X || nextCoordX + pinWidth / 2 >= maxX) ? false : true;
   };
+
   var isMoveYAvailable = function (nextCoordY) {
-    return (nextCoordY + PIN_HEIGHT + smallShift <= MIN_Y || nextCoordY + PIN_HEIGHT + smallShift >= MAX_Y) ? false : true;
+    return (nextCoordY + pinHeight + SMALL_SHIFT <= MIN_Y || nextCoordY + pinHeight + SMALL_SHIFT >= MAX_Y) ? false : true;
   };
 
   window.mainPinCoords = {};
+
   window.mainPinCoords.getMainPinCoordX = function () {
     return elementMainPin.offsetLeft;
   };
+
   window.mainPinCoords.getMainPinCoordY = function () {
     return elementMainPin.offsetTop;
   };
+
   window.mainPinCoords.setMainPinCoords = function (coordX, coordY) {
     elementMainPin.style.left = coordX + 'px';
     elementMainPin.style.top = coordY + 'px';
@@ -42,6 +47,7 @@
    * @return {boolean} возврат значения булева типа
    */
   window.mainPinCoords.isMoveAvailable = function (nextCoordX, nextCoordY) {
+    maxX = document.querySelector('.map').offsetWidth;
     return isMoveXAvailable(nextCoordX) && isMoveYAvailable(nextCoordY);
   };
 
@@ -62,8 +68,8 @@
    */
   window.mainPinCoords.calculateAddress = function (currentCoordX, currentCoordY) {
     return {
-      x: currentCoordX + PIN_WIDTH / 2,
-      y: currentCoordY + PIN_HEIGHT + smallShift
+      x: currentCoordX + pinWidth / 2,
+      y: currentCoordY + pinHeight + SMALL_SHIFT
     };
   };
 })();

@@ -4,7 +4,8 @@
 
 (function () {
   var TIME_DELAY = 500;
-
+  var elementsSelect = document.querySelectorAll('.map__filters > select');
+  var elementsFeature = document.querySelectorAll('.map__filters fieldset input');
   var PriceLimit = {
     low: 10000,
     high: 50000
@@ -31,6 +32,7 @@
       return ad.offer.rooms === parseInt(limitValue, 10);
     }
   };
+
   var getFunctionName = function (limitName) {
     return 'check' + limitName[0].toUpperCase() + limitName.slice(1, limitName.length);
   };
@@ -45,6 +47,7 @@
     var functionName = getFunctionName(limit.name);
     return limitParameter[functionName](ad, limit.value);
   };
+
   var isFeatureMatch = function (limit, ad) {
     return (ad.offer.features.indexOf(limit.name) === -1) ? false : true;
   };
@@ -79,8 +82,7 @@
    * @return {[]}
    */
   var getChangedSelects = function () {
-    var selects = document.querySelectorAll('.map__filters > select');
-    var changedSelects = Array.prototype.filter.call(selects, function (select) {
+    var changedSelects = Array.prototype.filter.call(elementsSelect, function (select) {
       return select.value !== 'any';
     });
     return changedSelects;
@@ -91,8 +93,7 @@
    * @return {[]}
    */
   var getCheckedFeatures = function () {
-    var features = document.querySelectorAll('.map__filters fieldset input');
-    var checkedFeatures = Array.prototype.filter.call(features, function (feature) {
+    var checkedFeatures = Array.prototype.filter.call(elementsFeature, function (feature) {
       return feature.checked === true;
     });
     return checkedFeatures;
@@ -159,13 +160,16 @@
    */
   var genCloseAdEvent = function () {
     var event = new Event('click');
-    var element = document.querySelector('.popup__close');
-    if (element !== null) {
-      element.dispatchEvent(event);
+    var elementCloseAd = document.querySelector('.popup__close');
+    if (elementCloseAd !== null) {
+      elementCloseAd.dispatchEvent(event);
     }
   };
 
-  var onChanged = function () {
+  var onChanged = function (evt) {
+    if (!(evt.keyCode === window.objects.KeyCode.ENTER || evt.keyCode === undefined)) {
+      return;
+    }
     genCloseAdEvent();
     clearTimeout(timerId);
     timerId = setTimeout(filterAds, TIME_DELAY);
@@ -173,4 +177,5 @@
 
   window.library.addListenerTo('.map__filters', 'change', onChanged);
   window.library.addListenerTo('.map__features', 'check', onChanged);
+  window.library.addListenerTo('.map__features', 'keyup', onChanged);
 })();

@@ -4,13 +4,19 @@
 
 (function () {
   var addressField = document.querySelector('#address');
+  var elementsCheckbox = document.querySelectorAll('input[type="checkbox"]');
+  var elementSelect = document.querySelector('#room_number');
+  var elementForm = document.querySelector('.ad-form');
+
   var onTimeChanged = function (evt) {
     evt.stopPropagation();
     window.adFormLibrary.changeTime(evt.target.value);
   };
+
   var onTypeAppartmentChanged = function (evt) {
     window.adFormLibrary.changePrice(evt.target.value);
   };
+
   var onRoomNumberChanged = function (evt) {
     window.adFormLibrary.setAvailableQuantityGuests(evt.target.value);
   };
@@ -27,10 +33,11 @@
   var onSubmitClicked = function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    window.notice.deleteNotices();
+    window.notice.delete();
     var data = window.adFormLibrary.getDataSend();
     window.backend.publishAd(data, onPublished, onConnectionError);
   };
+
   var onPublished = function (evt) {
     var xhr = evt.target;
     switch (xhr.status) {
@@ -42,15 +49,18 @@
         break;
     }
   };
+
   var onConnectionError = function () {
     window.library.renderErrorMessage(window.objects.ErrorMessage.ERROR_PUBLISH);
   };
+
   var onInvalidInput = function (evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    window.notice.updateNotices();
+    window.notice.update();
     window.validateInput(evt.target);
   };
+
   var addListenersToAdForm = function () {
     window.library.addListenerTo('#type', 'change', onTypeAppartmentChanged);
     window.library.addListenerTo('#timein', 'change', onTimeChanged);
@@ -62,9 +72,9 @@
     window.library.addListenerTo('#price', 'invalid', onInvalidInput);
     addListenersToCheckboxes();
   };
+
   var addListenersToCheckboxes = function () {
-    var elements = document.querySelectorAll('input[type="checkbox"]');
-    Array.prototype.forEach.call(elements, function (element) {
+    Array.prototype.forEach.call(elementsCheckbox, function (element) {
       element.addEventListener('keydown', function (evt) {
         if (evt.keyCode !== window.objects.KeyCode.ENTER) {
           return;
@@ -74,35 +84,38 @@
         evt.stopImmediatePropagation();
         var elementCheckbox = evt.target;
         if (window.library.isElementChecked(elementCheckbox)) {
-          window.library.uncheckedElement(elementCheckbox);
-        } else {
-          window.library.checkedElement(elementCheckbox);
+          window.library.uncheckElement(elementCheckbox);
+          return;
         }
+        window.library.checkElement(elementCheckbox);
       });
     });
   };
 
   window.adForm = {};
-  window.adForm.setFormDisabled = function () {
+
+  window.adForm.setDisabled = function () {
     window.adFormLibrary.disableForm();
-    window.adForm.formAvailable = false;
+    window.adForm.available = false;
     window.adFormLibrary.resetCheckboxes();
 
   };
-  window.adForm.setFormEnable = function () {
+
+  window.adForm.setEnable = function () {
     window.adFormLibrary.enableForm();
-    window.adForm.formAvailable = true;
-    var element = document.querySelector('#room_number');
-    window.adFormLibrary.setAvailableQuantityGuests(element.value);
+    window.adForm.available = true;
+    window.adFormLibrary.setAvailableQuantityGuests(elementSelect.value);
   };
+
   window.adForm.setAddressField = function (x, y) {
     addressField.value = x + ', ' + y;
   };
+
   window.adForm.resetFields = function () {
-    var adForm = document.querySelector('.ad-form');
-    adForm.reset();
+    elementForm.reset();
   };
-  window.adForm.formAvailable = false;
+
+  window.adForm.available = false;
 
   addListenersToAdForm();
 

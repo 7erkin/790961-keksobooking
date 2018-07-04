@@ -5,7 +5,9 @@
     var event = new Event('mouseup');
     document.dispatchEvent(event);
   };
+
   var nextCoords = {};
+
   var onMouseDown = function (evt) {
     evt.preventDefault();
     var startCoords = {
@@ -35,6 +37,7 @@
       startCoords.y = mouseEvt.clientY;
     };
   };
+
   var changeMainPinCoords = function (shift) {
     nextCoords.x = window.mainPinCoords.getMainPinCoordX() - shift.x;
     nextCoords.y = window.mainPinCoords.getMainPinCoordY() - shift.y;
@@ -46,5 +49,6 @@
     var addressCoords = window.mainPinCoords.calculateAddress(nextCoords.x, nextCoords.y);
     window.adForm.setAddressField(addressCoords.x, addressCoords.y);
   };
+
   window.library.addListenerTo('.map__pin--main', 'mousedown', onMouseDown);
 })();

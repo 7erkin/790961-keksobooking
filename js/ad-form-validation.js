@@ -27,19 +27,22 @@
       return 'Input value mismatch with pattern!';
     }
   };
+
   var getErrorTypeName = function (element) {
     var validity = element.validity;
     var type;
     for (type in validity) {
-      if (validity[type] === true) {
+      if (validity[type]) {
         break;
       }
     }
     return type;
   };
+
   var getFunctionName = function (typeName) {
     return 'get' + typeName[0].toUpperCase() + typeName.slice(1, typeName.length) + 'Notice';
   };
+
   var getNotice = function (element) {
     var typeName = getErrorTypeName(element);
     var functionName = getFunctionName(typeName);
@@ -47,14 +50,8 @@
     return notice;
   };
 
-  /**
-   * Добавляет узел предупреждения к невалидному инпуту
-   * @param {HTMLInputElement} elementInput
-   * @param {string} notice
-   */
-
   window.validateInput = function (elementInput) {
     var notice = getNotice(elementInput);
-    window.notice.setNotice(elementInput, notice);
+    window.notice.set(elementInput, notice);
   };
 })();

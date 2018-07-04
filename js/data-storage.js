@@ -35,6 +35,7 @@
   window.dataStorage = {};
   window.dataStorage.adsTransform = [];
   window.dataStorage.adsOrigin = [];
+
   window.dataStorage.downloadAds = function () {
     window.backend.fetchAds(onFetched, onConnectionError);
   };

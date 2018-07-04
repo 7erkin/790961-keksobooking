@@ -3,8 +3,8 @@
 'use strict';
 
 (function () {
-
   var scrolled = false;
+  var templateNotice = document.querySelector('#my-template').content.querySelector('#my-notice');
 
   var scrollToInvalidInput = function (cssSelector) {
     if (!scrolled) {
@@ -13,11 +13,13 @@
       element.scrollIntoView();
     }
   };
+
   var hasNotice = function (elementInput) {
     var elementParent = elementInput.parentElement;
     var noticeNode = elementParent.querySelector('#my-notice');
     return noticeNode;
   };
+
   var deleteNotice = function (cssSelector) {
     var element = document.querySelector(cssSelector);
     var noticeNode = hasNotice(element);
@@ -26,6 +28,7 @@
       noticeNode.remove();
     }
   };
+
   var updateNotice = function (cssSelector) {
     var element = document.querySelector(cssSelector);
     if (element.validity.valid) {
@@ -40,15 +43,14 @@
    * @return {HTMLDivElement}
    */
   var getNoticeNode = function () {
-    var templateNotice = document.querySelector('#my-template').content.querySelector('#my-notice');
     var noticeNode = templateNotice.cloneNode(true);
     return noticeNode;
   };
 
   window.notice = {};
-  window.notice.setNotice = function (elementInput, notice) {
-    var noticeNode;
-    noticeNode = hasNotice(elementInput);
+
+  window.notice.set = function (elementInput, notice) {
+    var noticeNode = hasNotice(elementInput);
     if (noticeNode === null) {
       elementInput.style.border = '5px solid red';
       noticeNode = getNoticeNode();
@@ -58,11 +60,13 @@
       noticeNode.innerText = notice;
     }
   };
-  window.notice.deleteNotices = function () {
+
+  window.notice.delete = function () {
     deleteNotice('#title');
     deleteNotice('#price');
   };
-  window.notice.updateNotices = function () {
+
+  window.notice.update = function () {
     scrolled = false;
     updateNotice('#title');
     updateNotice('#price');

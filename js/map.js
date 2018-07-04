@@ -7,19 +7,22 @@
   var setHandlerOnPageActive = function () {
     window.library.addListenerToDocument('active', onPageSetActive);
   };
+
   var setHandlerOnPageDisactive = function () {
     window.library.addListenerToDocument('disactive', onPageSetDisactive);
   };
+
   var deleteHandlerOnPageActive = function () {
     window.library.removeListenerFromDocument('active', onPageSetActive);
   };
+
   var deleteHandlerOnPageDisactive = function () {
     window.library.removeListenerFromDocument('disactive', onPageSetDisactive);
   };
 
   var onPageSetActive = function () {
     window.dataStorage.downloadAds();
-    window.adForm.setFormEnable();
+    window.adForm.setEnable();
     window.mapLibrary.renderMap();
     window.mapLibrary.renderAdForm();
     window.mapHandler.deleteHandlerOnMainpin();
@@ -31,9 +34,9 @@
   };
 
   var onPageSetDisactive = function () {
-    window.adAction.closeAd();
+    window.adAction.close();
     window.adForm.resetFields();
-    window.adForm.setFormDisabled();
+    window.adForm.setDisabled();
     window.mapHandler.deleteHandlerOnMappins();
     window.mapHandler.deleteHandlerUpdateMap();
     window.mapHandler.setHandlerOnMainpin();
@@ -43,7 +46,7 @@
     window.mapLibrary.resetNotices();
     window.mapLibrary.resetFilterForm();
     window.mapLibrary.hideFilters();
-    window.loadRenderPictures.deletePhotoes();
+    window.loadRenderPictures.deletePhotos();
     setTimeout(window.mainPinCoords.setMainPinBaseLocation, 1);
 
     deleteHandlerOnPageDisactive();
@@ -54,7 +57,7 @@
    * Устанавливает страницу в начальное состояние
    */
   var setInitialPageCondition = function () {
-    window.adForm.setFormDisabled();
+    window.adForm.setDisabled();
     window.mapLibrary.hideFilters();
     window.mapHandler.setHandlerOnMainpin();
     window.mapHandler.setCustomHandlerResetOnDocument();
