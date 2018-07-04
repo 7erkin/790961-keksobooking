@@ -3,15 +3,15 @@
 'use strict';
 
 (function () {
-  var MinPriceToTypeApartment = {
+  var TypeApartmentToMinPrice = {
     palace: 10000,
     flat: 1000,
     house: 5000,
     bungalo: 0
   };
   var EventNameToAttribute = {
-    INVALID: 'required',
-    SUBMIT: 'method'
+    invalid: 'required',
+    submit: 'method'
   };
   var elementForm = document.querySelector('.ad-form');
   var elementsFieldset = elementForm.querySelectorAll('fieldset');
@@ -49,9 +49,9 @@
     elementTimeout.value = nextTimeValue;
   };
 
-  window.adFormLibrary.changePrice = function (price) {
-    elementInputPrice.min = MinPriceToTypeApartment[price];
-    elementInputPrice.placeholder = MinPriceToTypeApartment[price];
+  window.adFormLibrary.changePrice = function (typeApartment) {
+    elementInputPrice.min = TypeApartmentToMinPrice[typeApartment];
+    elementInputPrice.placeholder = TypeApartmentToMinPrice[typeApartment];
   };
 
   /**
@@ -112,7 +112,7 @@
   };
 
   window.adFormLibrary.isProperEventTarget = function (element, eventName) {
-    return element.hasAttribute(EventNameToAttribute[eventName.toUpperCase()]);
+    return element.hasAttribute(EventNameToAttribute[eventName]);
   };
 
   window.adFormLibrary.resetCheckboxes = function () {
