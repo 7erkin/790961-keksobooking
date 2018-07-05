@@ -4,8 +4,8 @@
 
 (function () {
   var TIME_DELAY = 500;
-  var elementsSelect = document.querySelectorAll('.map__filters > select');
-  var elementsFeature = document.querySelectorAll('.map__filters fieldset input');
+  var elementsSelects = document.querySelectorAll('.map__filters > select');
+  var elementsFeatures = document.querySelectorAll('.map__filters fieldset input');
   var PriceLimit = {
     low: 10000,
     high: 50000
@@ -82,8 +82,8 @@
    * @return {[]}
    */
   var getChangedSelects = function () {
-    var changedSelects = Array.prototype.filter.call(elementsSelect, function (select) {
-      return select.value !== 'any';
+    var changedSelects = Array.prototype.filter.call(elementsSelects, function (elementSelect) {
+      return elementSelect.value !== 'any';
     });
     return changedSelects;
   };
@@ -93,8 +93,8 @@
    * @return {[]}
    */
   var getCheckedFeatures = function () {
-    var checkedFeatures = Array.prototype.filter.call(elementsFeature, function (feature) {
-      return feature.checked === true;
+    var checkedFeatures = Array.prototype.filter.call(elementsFeatures, function (elementFeature) {
+      return elementFeature.checked === true;
     });
     return checkedFeatures;
   };
@@ -109,7 +109,7 @@
         return right - left;
       }).
       forEach(function (index) {
-        window.dataStorage.adsTransform.splice(index, 1);
+        window.dataStorage.transformAds.splice(index, 1);
       });
   };
 
@@ -123,26 +123,26 @@
    * 6. Генерирую событие перерисовки карты с метками объявлений. Отрисуются только отфильтрованные объвления
    */
   var filterAds = function () {
-    window.dataStorage.adsTransform = window.dataStorage.adsOrigin.slice();
+    window.dataStorage.transformAds = window.dataStorage.originalAds.slice();
     var limits = getLimits();
-    var indexNotMatchedAds = [];
+    var indexesNotMatchAds = [];
     limits.parameterLimits.forEach(function (limit) {
-      window.dataStorage.adsTransform.forEach(function (ad, index) {
+      window.dataStorage.transformAds.forEach(function (ad, index) {
         if (!isParameterMatch(limit, ad)) {
-          indexNotMatchedAds.push(index);
+          indexesNotMatchAds.push(index);
         }
       });
-      deleteNotMatchedAds(indexNotMatchedAds);
-      indexNotMatchedAds = [];
+      deleteNotMatchedAds(indexesNotMatchAds);
+      indexesNotMatchAds = [];
     });
     limits.featureLimits.forEach(function (limit) {
-      window.dataStorage.adsTransform.forEach(function (ad, index) {
+      window.dataStorage.transformAds.forEach(function (ad, index) {
         if (!isFeatureMatch(limit, ad)) {
-          indexNotMatchedAds.push(index);
+          indexesNotMatchAds.push(index);
         }
       });
-      deleteNotMatchedAds(indexNotMatchedAds);
-      indexNotMatchedAds = [];
+      deleteNotMatchedAds(indexesNotMatchAds);
+      indexesNotMatchAds = [];
     });
     genMapRenderingEvent();
   };

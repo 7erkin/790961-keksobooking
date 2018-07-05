@@ -14,13 +14,13 @@
     submit: 'method'
   };
   var elementForm = document.querySelector('.ad-form');
-  var elementsFieldset = elementForm.querySelectorAll('fieldset');
+  var elementsFieldsets = elementForm.querySelectorAll('fieldset');
   var elementSuccessMessage = document.querySelector('.success');
   var elementTimein = document.querySelector('#timein');
   var elementTimeout = document.querySelector('#timeout');
   var elementInputPrice = document.querySelector('#price');
   var elementCapacity = document.querySelector('#capacity');
-  var elementsOption = elementCapacity.querySelectorAll('option');
+  var elementsOptions = elementCapacity.querySelectorAll('option');
 
   /**
    * Порождает событие reset на форме подачи объявления.
@@ -61,7 +61,7 @@
    */
   window.adFormLibrary.setAvailableQuantityGuests = function (value) {
     if (value === '100') {
-      Array.prototype.forEach.call(elementsOption, function (element) {
+      Array.prototype.forEach.call(elementsOptions, function (element) {
         if (!(element.value === '0')) {
           window.library.disableElement(element);
         } else {
@@ -70,7 +70,7 @@
       });
       elementCapacity.value = '0';
     } else {
-      Array.prototype.forEach.call(elementsOption, function (element) {
+      Array.prototype.forEach.call(elementsOptions, function (element) {
         if (element.value !== '0' && parseInt(element.value, 10) <= parseInt(value, 10)) {
           window.library.enableElement(element);
         } else {
@@ -99,11 +99,11 @@
   };
 
   window.adFormLibrary.enableForm = function () {
-    elementsFieldset.forEach(window.library.enableElement);
+    elementsFieldsets.forEach(window.library.enableElement);
   };
 
   window.adFormLibrary.disableForm = function () {
-    elementsFieldset.forEach(window.library.disableElement);
+    elementsFieldsets.forEach(window.library.disableElement);
   };
 
   window.adFormLibrary.genDisactivePageEvent = function () {

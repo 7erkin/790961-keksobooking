@@ -4,7 +4,7 @@
 
 (function () {
   var addressField = document.querySelector('#address');
-  var elementsCheckbox = document.querySelectorAll('input[type="checkbox"]');
+  var elementsCheckboxes = document.querySelectorAll('input[type="checkbox"]');
   var elementSelect = document.querySelector('#room_number');
   var elementForm = document.querySelector('.ad-form');
 
@@ -74,7 +74,7 @@
   };
 
   var addListenersToCheckboxes = function () {
-    Array.prototype.forEach.call(elementsCheckbox, function (element) {
+    Array.prototype.forEach.call(elementsCheckboxes, function (element) {
       element.addEventListener('keydown', function (evt) {
         if (evt.keyCode !== window.objects.KeyCode.ENTER) {
           return;

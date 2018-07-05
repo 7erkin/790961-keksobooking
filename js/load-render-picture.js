@@ -6,38 +6,6 @@
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   var elementAvatarContainer = document.querySelector('.ad-form-header__preview');
   var elementDefaultAvatarPhoto = elementAvatarContainer.querySelector('img');
-
-  var Image = function (config, source) {
-    this.width = config.width || DEFAULT_IMAGE_WIDTH;
-    this.height = config.height || DEFAULT_IMAGE_HEIGHT;
-    this.src = source;
-    this.alt = config.alt;
-  };
-
-  Image.prototype.toNode = function () {
-    var elementImage = document.createElement('img');
-    var self = this;
-    Object.keys(this).forEach(function (key) {
-      elementImage[key] = self[key];
-    });
-    return elementImage;
-  };
-
-  var renderer = {
-    renderPhoto: function (source) {
-      var elementImage = (new Image(this.renderParameters.config, source)).toNode();
-      if (isAnyPhotos(this.renderParameters.container.node) && !canBeMorePhotos(this.renderParameters.container)) {
-        renderer.deletePhotos.call(this.renderParameters.container.node);
-      }
-      this.renderParameters.container.node.appendChild(elementImage);
-    },
-    deletePhotos: function () {
-      var elementPhotos = this.querySelectorAll('img');
-      Array.prototype.forEach.call(elementPhotos, function (photo) {
-        photo.remove();
-      });
-    }
-  };
   var idInputFileToRenderParameter = {
     images: {
       container: {
@@ -59,17 +27,37 @@
     }
   };
 
-  var isAnyPhotos = function (elementContainer) {
-    return (elementContainer.querySelector('img') !== null) ? true : false;
+  var Image = function (inputIdName, source) {
+    var renderParameter = idInputFileToRenderParameter[inputIdName];
+    this.element = document.createElement('img');
+    this.element.width = renderParameter.config.width || DEFAULT_IMAGE_WIDTH;
+    this.element.height = renderParameter.config.height || DEFAULT_IMAGE_HEIGHT;
+    this.element.alt = renderParameter.config.alt;
+    this.element.src = source;
+    this.container = renderParameter.container;
   };
 
-  var canBeMorePhotos = function (elementContainer) {
-    return elementContainer.moreThanOnePhoto;
+  Image.prototype.isAnyPhotos = function () {
+    return (this.container.node.querySelector('img') !== null) ? true : false;
+  };
+  Image.prototype.canBeMorePhotos = function () {
+    return this.container.moreThanOnePhoto;
+  };
+  Image.prototype.render = function () {
+    if (this.isAnyPhotos() && !this.canBeMorePhotos()) {
+      this.deletePhotos();
+    }
+    this.container.node.appendChild(this.element);
+  };
+  Image.prototype.deletePhotos = function () {
+    var elementsPhotos = this.container.node.querySelectorAll('img');
+    Array.prototype.forEach.call(elementsPhotos, function (elementPhoto) {
+      elementPhoto.remove();
+    });
   };
 
   var onChanged = function (evt) {
     var elementInput = evt.target;
-    elementInput.renderParameters = idInputFileToRenderParameter[elementInput.id];
     Array.prototype.forEach.call(elementInput.files, function (file) {
       var fileName = file.name.toLowerCase();
       var match = FILE_TYPES.some(function (typeName) {
@@ -78,7 +66,8 @@
       if (match) {
         var reader = new FileReader();
         reader.addEventListener('load', function () {
-          renderer.renderPhoto.call(elementInput, reader.result);
+          var image = new Image(elementInput.id, reader.result);
+          image.render();
         });
         reader.readAsDataURL(file);
       }
@@ -100,10 +89,11 @@
 
   window.loadRenderPictures.deletePhotos = function () {
     Object.keys(idInputFileToRenderParameter).forEach(function (key) {
-      var container = idInputFileToRenderParameter[key].container.node;
-      if (isAnyPhotos(container)) {
-        renderer.deletePhotos.call(container);
-      }
+      var elementContainer = idInputFileToRenderParameter[key].container.node;
+      var elementsPhoto = elementContainer.querySelectorAll('img');
+      Array.prototype.forEach.call(elementsPhoto, function (elementPhoto) {
+        elementPhoto.remove();
+      });
     });
     renderDefaultAvatarPhoto();
   };

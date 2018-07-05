@@ -20,8 +20,8 @@
     var xhr = evt.target;
     switch (xhr.status) {
       case window.objects.StatusCode.SUCCESS:
-        window.dataStorage.adsOrigin = xhr.response;
-        window.dataStorage.adsTransform = window.dataStorage.adsOrigin.slice();
+        window.dataStorage.originalAds = xhr.response;
+        window.dataStorage.transformAds = window.dataStorage.originalAds.slice();
         var points = window.mapLibrary.createPointElements();
         window.mapLibrary.renderPoints(points);
         window.mapLibrary.renderFilters();
@@ -33,8 +33,8 @@
   };
 
   window.dataStorage = {};
-  window.dataStorage.adsTransform = [];
-  window.dataStorage.adsOrigin = [];
+  window.dataStorage.transformAds = [];
+  window.dataStorage.originalAds = [];
 
   window.dataStorage.downloadAds = function () {
     window.backend.fetchAds(onFetched, onConnectionError);

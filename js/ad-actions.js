@@ -61,7 +61,7 @@
 
   window.adAction.open = function (element) {
     var index = getNumberAd(element);
-    window.adAction.render(window.dataStorage.adsTransform[index]);
+    window.adAction.render(window.dataStorage.transformAds[index]);
     window.library.addListenerToDocument('keydown', onCloseAdClicked);
   };
 

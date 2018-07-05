@@ -28,8 +28,8 @@
   var iconGeometry = getIconGeometry();
 
   var resetFilterCheckboxes = function () {
-    var elementsCheckbox = document.querySelector('#housing-features').querySelectorAll('input[checked="checked"]');
-    Array.prototype.forEach.call(elementsCheckbox, function (elementCheckbox) {
+    var elementsCheckboxes = document.querySelector('#housing-features').querySelectorAll('input[checked="checked"]');
+    Array.prototype.forEach.call(elementsCheckboxes, function (elementCheckbox) {
       elementCheckbox.removeAttribute('checked');
     });
   };
@@ -71,7 +71,7 @@
 
   window.mapLibrary.createPointElements = function () {
     var points = [];
-    window.dataStorage.adsTransform.slice(0, QUANTITY_POINTS_ON_MAP).forEach(function (element, index) {
+    window.dataStorage.transformAds.slice(0, QUANTITY_POINTS_ON_MAP).forEach(function (element, index) {
       var point = templateMappin.cloneNode(true);
       var pointLocation = getPointLocation(element);
       point.style = 'left: ' + pointLocation.x + 'px; top: ' + pointLocation.y + 'px';
@@ -86,8 +86,8 @@
   };
 
   window.mapLibrary.deletePoints = function () {
-    var elementsPin = elementMappinsContainer.querySelectorAll('[data-ad-button]');
-    Array.prototype.forEach.call(elementsPin, function (elementPin) {
+    var elementsPins = elementMappinsContainer.querySelectorAll('[data-ad-button]');
+    Array.prototype.forEach.call(elementsPins, function (elementPin) {
       elementPin.remove();
     });
   };

@@ -70,11 +70,11 @@
   };
 
   window.library.getRandomArrayElements = function (array, quantity) {
-    var temp = [];
+    var tempValues = [];
     for (var i = 0; i < quantity; ++i) {
-      temp.push(window.library.getRandomArrayElement(array));
+      tempValues.push(window.library.getRandomArrayElement(array));
     }
-    return temp;
+    return tempValues;
   };
 
   window.library.shuffle = function (array) {
