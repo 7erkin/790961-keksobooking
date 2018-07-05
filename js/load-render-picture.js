@@ -90,8 +90,8 @@
   window.loadRenderPictures.deletePhotos = function () {
     Object.keys(idInputFileToRenderParameter).forEach(function (key) {
       var elementContainer = idInputFileToRenderParameter[key].container.node;
-      var elementsPhoto = elementContainer.querySelectorAll('img');
-      Array.prototype.forEach.call(elementsPhoto, function (elementPhoto) {
+      var elementsPhotos = elementContainer.querySelectorAll('img');
+      Array.prototype.forEach.call(elementsPhotos, function (elementPhoto) {
         elementPhoto.remove();
       });
     });
