@@ -94,7 +94,7 @@
    */
   var getCheckedFeatures = function () {
     var checkedFeatures = Array.prototype.filter.call(elementsFeatures, function (elementFeature) {
-      return elementFeature.checked === true;
+      return elementFeature.checked;
     });
     return checkedFeatures;
   };
